@@ -24,10 +24,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final fb.Auth auth;
-
-  MyApp() : auth = fb.auth();
-
   // Root widget of the application
   @override
   Widget build(BuildContext context) {

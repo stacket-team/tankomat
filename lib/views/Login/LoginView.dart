@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/views/Register/RegisterView.dart';
+import 'package:firebase/firebase.dart' as firebase;
 
 class LoginView extends StatefulWidget {
   LoginView({Key key, this.title}) : super(key: key);
@@ -10,12 +11,48 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final firebase.Auth auth;
+
+  _LoginViewState() : auth = firebase.auth() {
+    auth.onAuthStateChanged.listen((firebase.User user) async {
+      if (user != null) {
+        if (user.emailVerified) {
+          // TODO Redirect to Home instead of Register view
+        } else {
+          try {
+            // TODO Change auth.languageCode to user language
+            await auth.currentUser.sendEmailVerification(
+                firebase.ActionCodeSettings(
+                    url: 'https://stacket-tankomat.firebaseapp.com'));
+          } catch (e) {
+            // TODO Display information about email verification
+            print(e.toString());
+          }
+        }
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginView()),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final emailField = TextField(
       obscureText: false,
       style: style,
+      controller: emailController,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: 'E-mail',
@@ -26,6 +63,7 @@ class _LoginViewState extends State<LoginView> {
     final passwordField = TextField(
       obscureText: true,
       style: style,
+      controller: passwordController,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: 'Haslo',
@@ -40,7 +78,17 @@ class _LoginViewState extends State<LoginView> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {},
+        onPressed: () async {
+          try {
+            // TODO Validate email and password
+            String email = emailController.text;
+            String password = passwordController.text;
+            await auth.signInWithEmailAndPassword(email, password);
+          } catch (e) {
+            // TODO Add error message display
+            print(e.toString());
+          }
+        },
         child: Text(
           'Zaloguj sie',
           textAlign: TextAlign.center,
