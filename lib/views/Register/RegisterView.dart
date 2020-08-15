@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/views/Login/LoginView.dart';
 
 class RegisterView extends StatefulWidget {
   RegisterView({Key key, this.title}) : super(key: key);
@@ -27,7 +28,7 @@ class _RegisterViewState extends State<RegisterView> {
       style: style,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: 'Email',
+        hintText: 'E-mail',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
     );
@@ -37,7 +38,7 @@ class _RegisterViewState extends State<RegisterView> {
       style: style,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: 'Password',
+        hintText: 'Haslo',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
     );
@@ -58,6 +59,15 @@ class _RegisterViewState extends State<RegisterView> {
           ),
         ));
 
+    final signUpButton = FlatButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginView()),
+          );
+        },
+        child: Text('Masz juz konto? Zaloguj sie tutaj!'));
+
     return Scaffold(
       body: Center(
         child: Container(
@@ -75,7 +85,8 @@ class _RegisterViewState extends State<RegisterView> {
                     passwordField,
                     SizedBox(height: 25.0),
                     registerButton,
-                    SizedBox(height: 15.0),
+                    SizedBox(height: 10.0),
+                    signUpButton,
                   ],
                 ))),
       ),

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/views/Register/RegisterView.dart';
 
-class HomeView extends StatefulWidget {
-  HomeView({Key key, this.title}) : super(key: key);
+class LoginView extends StatefulWidget {
+  LoginView({Key key, this.title}) : super(key: key);
   final String title;
   @override
-  _HomeViewState createState() => _HomeViewState();
+  _LoginViewState createState() => _LoginViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _LoginViewState extends State<LoginView> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
   @override
@@ -18,7 +18,7 @@ class _HomeViewState extends State<HomeView> {
       style: style,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: 'Email',
+        hintText: 'E-mail',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
     );
@@ -28,7 +28,7 @@ class _HomeViewState extends State<HomeView> {
       style: style,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: 'Password',
+        hintText: 'Haslo',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
     );
@@ -42,7 +42,7 @@ class _HomeViewState extends State<HomeView> {
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {},
         child: Text(
-          'Login',
+          'Zaloguj sie',
           textAlign: TextAlign.center,
           style:
               style.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
@@ -83,7 +83,7 @@ class _HomeViewState extends State<HomeView> {
                 passwordField,
                 SizedBox(height: 35.0),
                 loginButton,
-                SizedBox(height: 15.0),
+                SizedBox(height: 10.0),
                 registerButton,
               ],
             ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tankomat/views/Home/HomeView.dart';
+import 'package:tankomat/views/Login/LoginView.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: HomeView(title: 'Login'),
+      home: LoginView(title: 'Login'),
     );
   }
 }
