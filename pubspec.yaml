@@ -29,6 +29,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
 
+  firebase: '7.3.0'
+  flutter_dotenv: '2.1.0'
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -62,6 +65,7 @@ flutter:
   # example:
   assets:
     - logo.png
+    - .env
   fonts:
     - family: Montserrat
       fonts:
