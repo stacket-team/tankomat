@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/views/Register/RegisterView.dart';
 import 'package:firebase/firebase.dart' as firebase;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginView extends StatefulWidget {
   LoginView({Key key, this.title}) : super(key: key);
@@ -16,16 +17,17 @@ class _LoginViewState extends State<LoginView> {
   final firebase.Auth auth;
 
   _LoginViewState() : auth = firebase.auth() {
+    auth.useDeviceLanguage();
+
     auth.onAuthStateChanged.listen((firebase.User user) async {
       if (user != null) {
         if (user.emailVerified) {
           // TODO Redirect to Home instead of Register view
         } else {
           try {
-            // TODO Change auth.languageCode to user language
             await auth.currentUser.sendEmailVerification(
                 firebase.ActionCodeSettings(
-                    url: 'https://stacket-tankomat.firebaseapp.com'));
+                    url: 'https://${DotEnv().env["AUTH_DOMAIN"]}'));
           } catch (e) {
             // TODO Display information about email verification
             print(e.toString());
