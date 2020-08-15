@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/views/Register/RegisterView.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+class HomeView extends StatefulWidget {
+  HomeView({Key key, this.title}) : super(key: key);
   final String title;
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomeViewState createState() => _HomeViewState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeViewState extends State<HomeView> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
   @override
@@ -40,11 +41,23 @@ class _HomePageState extends State<HomePage> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {},
-        child: Text('Login',
-            textAlign: TextAlign.center,
-            style: style.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold)),
+        child: Text(
+          'Login',
+          textAlign: TextAlign.center,
+          style:
+              style.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
+    );
+
+    final registerButton = FlatButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RegisterView()),
+        );
+      },
+      child: Text('Nie masz konta? Zarejestruj sie?'),
     );
 
     return Scaffold(
@@ -70,7 +83,8 @@ class _HomePageState extends State<HomePage> {
                 passwordField,
                 SizedBox(height: 35.0),
                 loginButton,
-                SizedBox(height: 15.0)
+                SizedBox(height: 15.0),
+                registerButton,
               ],
             ),
           ),
