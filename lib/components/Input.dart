@@ -5,12 +5,14 @@ class Input extends StatelessWidget {
   final String placeholder;
   final IconData icon;
   final ValueChanged<String> onChange;
+  final TextEditingController controller;
   final bool isPassword;
   const Input({
     Key key,
     this.placeholder,
     this.icon = Icons.person,
     this.onChange,
+    this.controller,
     this.isPassword,
   }) : super(key: key);
 
@@ -20,6 +22,7 @@ class Input extends StatelessWidget {
       child: TextField(
         obscureText: isPassword,
         onChanged: onChange,
+        controller: controller,
         cursorColor: Color(0xFF6F35A5),
         decoration: InputDecoration(
           icon: Icon(
