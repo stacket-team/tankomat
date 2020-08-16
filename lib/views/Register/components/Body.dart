@@ -38,11 +38,11 @@ class Body extends StatelessWidget {
             ),
             Input(
               isPassword: true,
-              placeholder: 'Haslo',
+              placeholder: 'Hasło',
               controller: passwordController,
             ),
             Button(
-              text: 'zarejestruj sie',
+              text: 'Zarejestruj się',
               press: onPress,
             ),
             SizedBox(height: size.height * 0.03),

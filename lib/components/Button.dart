@@ -27,7 +27,7 @@ class Button extends StatelessWidget {
           onPressed: press,
           child: Text(
             text,
-            style: TextStyle(color: textColor),
+            style: TextStyle(color: textColor, fontSize: 15.0),
           ),
         ),
       ),

@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: LoginView(title: 'Login'),
+      home: LoginView(),
     );
   }
 }
