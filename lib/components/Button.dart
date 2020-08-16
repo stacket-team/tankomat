@@ -21,7 +21,7 @@ class Button extends StatelessWidget {
       width: size.width * 0.8,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(29),
-        child: FlatButton(
+        child: RaisedButton(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
           color: color,
           onPressed: press,

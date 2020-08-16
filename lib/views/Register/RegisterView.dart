@@ -59,10 +59,7 @@ class _RegsiterViewState extends State<RegisterView> {
               print(e.toString());
             }
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginView()),
-            );
+            Navigator.of(context).pushNamed('/login');
           } on firebase.FirebaseError catch (e) {
             if (e.code == 'auth/email-already-in-use') {
               trySignin = true;

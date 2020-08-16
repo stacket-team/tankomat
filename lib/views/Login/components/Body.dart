@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/components/Form.dart';
 import 'package:tankomat/views/Login/components/Background.dart';
 import 'package:tankomat/views/Login/components/DontHaveAnAccount.dart';
 import 'package:tankomat/components/Button.dart';
 import 'package:tankomat/components/Input.dart';
-import 'package:tankomat/views/Register/RegisterView.dart';
+
+import '../../../components/Input.dart';
 
 class Body extends StatelessWidget {
   final TextEditingController emailController;
@@ -19,36 +21,38 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Input(
-              isPassword: false,
-              placeholder: 'E-mail',
-              controller: emailController,
+            AuthForm(
+              children: [
+                Input(
+                  isPassword: false,
+                  isEmail: true,
+                  placeholder: 'E-mail',
+                  controller: emailController,
+                ),
+                Input(
+                  isPassword: true,
+                  isEmail: false,
+                  placeholder: 'Hasło',
+                  controller: passwordController,
+                ),
+                Button(
+                  text: 'Zaloguj się',
+                  press: onPress,
+                ),
+                DontHaveAnAccount(
+                  text: 'Nie masz konta? Zarejestruj się tutaj!',
+                  onPress: () {
+                    Navigator.of(context).pushNamed('/register');
+                    print('i am here');
+                  },
+                ),
+              ],
             ),
-            Input(
-              isPassword: true,
-              placeholder: 'Hasło',
-              controller: passwordController,
-            ),
-            Button(
-              text: 'Zaloguj się',
-              press: onPress,
-            ),
-            // SizedBox(height: size.height * 0.03),
-            DontHaveAnAccount(
-              text: 'Nie masz konta? Zarejestruj się tutaj!',
-              onPress: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegisterView()),
-                );
-              },
-            )
           ],
         ),
       ),

@@ -7,6 +7,7 @@ class Input extends StatelessWidget {
   final ValueChanged<String> onChange;
   final TextEditingController controller;
   final bool isPassword;
+  final bool isEmail;
   const Input({
     Key key,
     this.placeholder,
@@ -14,13 +15,15 @@ class Input extends StatelessWidget {
     this.onChange,
     this.controller,
     this.isPassword,
+    this.isEmail,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
-      child: TextField(
+      child: TextFormField(
         obscureText: isPassword,
+        keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
         onChanged: onChange,
         controller: controller,
         cursorColor: Color(0xFF6F35A5),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tankomat/views/Login/LoginView.dart';
+import 'package:tankomat/route_generator.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tankomat/utils.dart';
 
@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: LoginView(),
+      initialRoute: '/login',
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

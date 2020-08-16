@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/components/Form.dart';
 import 'package:tankomat/views/Register/components/Background.dart';
 import 'package:tankomat/views/Register/components/SocialDivider.dart';
 import 'package:tankomat/components/Button.dart';
@@ -26,27 +27,35 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Input(
-              isPassword: false,
-              placeholder: 'Nazwa',
-              controller: nameController,
+            AuthForm(
+              children: [
+                Input(
+                  isPassword: false,
+                  isEmail: false,
+                  placeholder: 'Imię',
+                  controller: nameController,
+                ),
+                Input(
+                  isPassword: false,
+                  isEmail: true,
+                  placeholder: 'E-mail',
+                  controller: emailController,
+                ),
+                Input(
+                  isPassword: true,
+                  isEmail: false,
+                  placeholder: 'Hasło',
+                  controller: passwordController,
+                ),
+                Button(
+                  text: 'Zarejestruj się',
+                  press: onPress,
+                ),
+              ],
             ),
-            Input(
-              isPassword: false,
-              placeholder: 'E-mail',
-              controller: emailController,
-            ),
-            Input(
-              isPassword: true,
-              placeholder: 'Hasło',
-              controller: passwordController,
-            ),
-            Button(
-              text: 'Zarejestruj się',
-              press: onPress,
-            ),
-            SizedBox(height: size.height * 0.03),
             SocialDivider(),
+            // SizedBox(height: size.height * 0.03),
+            // SocialDivider(),
           ],
         ),
       ),
