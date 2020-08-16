@@ -4,20 +4,19 @@ import 'package:tankomat/views/Register/components/SocialDivider.dart';
 import 'package:tankomat/components/Button.dart';
 import 'package:tankomat/components/Input.dart';
 import 'package:firebase/firebase.dart' as firebase;
+import 'package:firebase/firestore.dart' as firestore;
 import 'package:tankomat/views/Login/LoginView.dart';
 
 class Body extends StatelessWidget {
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final firebase.Auth auth;
+  final firestore.CollectionReference ref;
 
-  Body() : auth = firebase.auth() {
-    auth.onAuthStateChanged.listen((firebase.User user) {
-      if (user != null) {
-        // TODO Redirect to Login view
-      }
-    });
-  }
+  Body()
+      : auth = firebase.auth(),
+        ref = firebase.firestore().collection('users');
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +26,11 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Input(
+              isPassword: false,
+              placeholder: 'Nazwa',
+              controller: nameController,
+            ),
             Input(
               isPassword: false,
               placeholder: 'E-mail',
@@ -42,11 +46,27 @@ class Body extends StatelessWidget {
               press: () async {
                 bool trySignin = false;
                 // TODO Validate email and password
+                String name = nameController.text;
                 String email = emailController.text;
                 String password = passwordController.text;
                 try {
-                  await auth.createUserWithEmailAndPassword(email, password);
-                  // TODO Add account to /users in Firestore
+                  String uid = (await auth.createUserWithEmailAndPassword(
+                          email, password))
+                      .user
+                      .uid;
+
+                  Map<String, dynamic> userData = {
+                    'name': name,
+                    'type': null,
+                    'history': [],
+                  };
+
+                  try {
+                    await ref.doc(uid).set(userData);
+                  } catch (e) {
+                    print(e.toString());
+                  }
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => LoginView()),
@@ -62,7 +82,15 @@ class Body extends StatelessWidget {
 
                 if (trySignin) {
                   try {
-                    await auth.signInWithEmailAndPassword(email, password);
+                    firebase.User user =
+                        (await auth.signInWithEmailAndPassword(email, password))
+                            .user;
+                    if (user != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginView()),
+                      );
+                    }
                   } catch (e) {
                     // TODO Add error message display
                     print(e.toString());
