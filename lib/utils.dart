@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:tankomat/constants.dart';
 import 'package:firebase/firebase.dart' as firebase;
 
@@ -15,28 +16,29 @@ void initializeFirebase() {
         measurementId: MEASUREMENT_ID,
       );
     }
-    firebase.Auth auth = firebase.auth();
-    auth.useDeviceLanguage();
-    auth.onAuthStateChanged.listen(authStateChanged(auth));
   } on firebase.FirebaseJsNotLoadedException catch (e) {
     print(e.toString());
   }
 }
 
-Function authStateChanged(firebase.Auth auth) => (firebase.User user) async {
-      if (user != null) {
-        if (user.emailVerified) {
-          // TODO Redirect to Home instead of Register view
-        } else {
-          try {
-            await auth.currentUser.sendEmailVerification(
-                firebase.ActionCodeSettings(url: 'https://$AUTH_DOMAIN'));
-          } catch (e) {
-            // TODO Display information about email verification
-            print(e.toString());
-          }
-        }
+void initializeAuth(BuildContext context) {
+  firebase.Auth auth = firebase.auth();
+  auth.useDeviceLanguage();
+  auth.onAuthStateChanged.listen((firebase.User user) async {
+    if (user != null) {
+      if (user.emailVerified) {
+        Navigator.of(context).pushNamed('/');
       } else {
-        // TODO Redirect user using router
+        try {
+          await auth.currentUser.sendEmailVerification(
+              firebase.ActionCodeSettings(url: 'https://$AUTH_DOMAIN'));
+        } catch (e) {
+          // TODO Display information about email verification
+          print(e.toString());
+        }
       }
-    };
+    } else {
+      Navigator.of(context).pushNamed('/login');
+    }
+  });
+}

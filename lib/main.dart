@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tankomat/route_generator.dart';
 import 'package:tankomat/utils.dart';
 
-void main() async {
+void main() {
   initializeFirebase();
   runApp(MyApp());
 }
