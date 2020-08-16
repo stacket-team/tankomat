@@ -4,16 +4,29 @@ import 'package:firebase/firebase.dart' as firebase;
 import 'package:firebase/firestore.dart' as firestore;
 import 'package:tankomat/views/Login/LoginView.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
+  @override
+  _RegsiterViewState createState() => _RegsiterViewState();
+}
+
+class _RegsiterViewState extends State<RegisterView> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final firebase.Auth auth;
   final firestore.CollectionReference ref;
 
-  RegisterView()
+  _RegsiterViewState()
       : auth = firebase.auth(),
         ref = firebase.firestore().collection('users');
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

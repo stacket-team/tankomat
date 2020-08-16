@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/views/Login/components/Background.dart';
 import 'package:tankomat/views/Login/components/DontHaveAnAccount.dart';
-import '../../../components/Button.dart';
-import '../../../components/Input.dart';
-import '../../Register/RegisterView.dart';
-import '../../Register/components/Background.dart';
+import 'package:tankomat/components/Button.dart';
+import 'package:tankomat/components/Input.dart';
+import 'package:tankomat/views/Register/RegisterView.dart';
 
 class Body extends StatelessWidget {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final Function onPress;
 
-  void login() async {
-    // TODO Add login logic
-  }
+  Body({
+    Key key,
+    this.emailController,
+    this.passwordController,
+    this.onPress,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,7 @@ class Body extends StatelessWidget {
             ),
             Button(
               text: 'Zaloguj się',
-              press: login,
+              press: onPress,
             ),
             // SizedBox(height: size.height * 0.03),
             DontHaveAnAccount(
