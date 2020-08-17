@@ -4,6 +4,21 @@ import 'views/HomeView/HomeView.dart';
 import 'views/Login/LoginView.dart';
 import 'views/Register/RegisterView.dart';
 
+class InstantPageRoute<T> extends MaterialPageRoute<T> {
+  InstantPageRoute({WidgetBuilder builder, RouteSettings settings})
+      : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return child;
+  }
+}
+
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // Getting arguments passed in while calling Navigator.pushNamed
@@ -11,13 +26,13 @@ class RouteGenerator {
 
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => HomeView());
+        return InstantPageRoute(builder: (_) => HomeView());
       case '/login':
-        return MaterialPageRoute(builder: (_) => LoginView());
+        return InstantPageRoute(builder: (_) => LoginView());
       case '/register':
-        return MaterialPageRoute(builder: (_) => RegisterView());
+        return InstantPageRoute(builder: (_) => RegisterView());
       case '/verifyEmail':
-        return MaterialPageRoute(builder: (_) => VerifyEmailView());
+        return InstantPageRoute(builder: (_) => VerifyEmailView());
       default:
         // If there is no such named route in the switch statement
         return _errorRoute();
@@ -25,7 +40,7 @@ class RouteGenerator {
   }
 
   static Route<dynamic> _errorRoute() {
-    return MaterialPageRoute(builder: (_) {
+    return InstantPageRoute(builder: (_) {
       return Scaffold(
         appBar: AppBar(title: Text('Error')),
         body: Center(
