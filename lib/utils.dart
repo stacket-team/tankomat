@@ -72,3 +72,8 @@ Future<void> createUser(String name, String email, String password) async {
 
   await sendEmailVerification();
 }
+
+Future<void> logoutUser() {
+  firebase.Auth auth = firebase.auth();
+  return auth.signOut();
+}

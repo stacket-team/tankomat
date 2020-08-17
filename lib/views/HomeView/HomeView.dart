@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tankomat/views/HomeView/DashboardView.dart';
 import 'package:tankomat/views/HomeView/SomeView.dart';
 import 'package:tankomat/views/HomeView/map.dart';
-import 'package:tankomat/views/HomeView/profile.dart';
+import 'package:tankomat/views/Profile/ProfileView.dart';
 
 class HomeView extends StatefulWidget {
   @override
