@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/constants.dart';
 import 'package:firebase/firebase.dart' as firebase;
+import 'package:firebase/firestore.dart' as firestore;
 
 void initializeFirebase() {
   try {
@@ -29,16 +30,43 @@ void initializeAuth(BuildContext context) {
       if (user.emailVerified) {
         Navigator.of(context).pushNamed('/');
       } else {
-        try {
-          await auth.currentUser.sendEmailVerification(
-              firebase.ActionCodeSettings(url: 'https://$AUTH_DOMAIN'));
-        } catch (e) {
-          // TODO Display information about email verification
-          print(e.toString());
-        }
+        Navigator.of(context).pushNamed('/verifyEmail');
       }
     } else {
       Navigator.of(context).pushNamed('/login');
     }
   });
+}
+
+Future<void> sendEmailVerification() {
+  firebase.Auth auth = firebase.auth();
+  return auth.currentUser.sendEmailVerification(
+      firebase.ActionCodeSettings(url: 'https://$AUTH_DOMAIN'));
+}
+
+Future<bool> confirmEmailVerified() async {
+  firebase.Auth auth = firebase.auth();
+  await auth.currentUser.reload();
+  return auth.currentUser.emailVerified;
+}
+
+Future<void> loginUser(String email, String password) {
+  firebase.Auth auth = firebase.auth();
+  return auth.signInWithEmailAndPassword(email, password);
+}
+
+Future<void> createUser(String name, String email, String password) async {
+  firebase.Auth auth = firebase.auth();
+  firestore.CollectionReference ref = firebase.firestore().collection('/users');
+
+  firebase.UserCredential userCredential =
+      await auth.createUserWithEmailAndPassword(email, password);
+
+  Map<String, dynamic> userData = {
+    'name': name,
+    'type': null,
+    'history': [],
+  };
+
+  await ref.doc(userCredential.user.uid).set(userData);
 }
