@@ -69,4 +69,6 @@ Future<void> createUser(String name, String email, String password) async {
   };
 
   await ref.doc(userCredential.user.uid).set(userData);
+
+  await sendEmailVerification();
 }
