@@ -30,7 +30,6 @@ class _HorizontalScrollComponentState extends State<HorizontalScrollComponent> {
   }
 }
 
-//sample tile
 class ScrollTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

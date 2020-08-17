@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tankomat/constants.dart';
 
 class SocialDivider extends StatelessWidget {
   @override
@@ -15,8 +14,11 @@ class SocialDivider extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              'lub',
-              style: TextStyle(color: Colors.black),
+              'LUB',
+              style: TextStyle(
+                color: Color(0xFFD9D9D9),
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           buildDivider(),
@@ -26,6 +28,11 @@ class SocialDivider extends StatelessWidget {
   }
 
   Expanded buildDivider() {
-    return Expanded(child: Divider(color: PRIMARY_COLOR, height: 1.5));
+    return Expanded(
+      child: Divider(
+        color: Color(0xFFD9D9D9),
+        thickness: 1.75,
+      ),
+    );
   }
 }

@@ -4,8 +4,7 @@ import 'package:tankomat/views/Login/components/Background.dart';
 import 'package:tankomat/views/Login/components/DontHaveAnAccount.dart';
 import 'package:tankomat/components/Button.dart';
 import 'package:tankomat/components/Input.dart';
-
-import '../../../components/Input.dart';
+import 'package:tankomat/components/Input.dart';
 
 class Body extends StatelessWidget {
   final TextEditingController emailController;
@@ -28,17 +27,27 @@ class Body extends StatelessWidget {
           children: <Widget>[
             AuthForm(
               children: [
+                SizedBox(
+                  height: 150.0,
+                  child: Image.asset(
+                    'assets/logo.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                SizedBox(height: 20.0),
                 Input(
                   isPassword: false,
                   isEmail: true,
                   placeholder: 'E-mail',
                   controller: emailController,
+                  icon: Icons.person,
                 ),
                 Input(
                   isPassword: true,
                   isEmail: false,
                   placeholder: 'Hasło',
                   controller: passwordController,
+                  icon: Icons.email,
                 ),
                 Button(
                   text: 'Zaloguj się',
@@ -48,7 +57,6 @@ class Body extends StatelessWidget {
                   text: 'Nie masz konta? Zarejestruj się tutaj!',
                   onPress: () {
                     Navigator.of(context).pushNamed('/register');
-                    print('i am here');
                   },
                 ),
               ],

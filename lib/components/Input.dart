@@ -11,7 +11,7 @@ class Input extends StatelessWidget {
   const Input({
     Key key,
     this.placeholder,
-    this.icon = Icons.person,
+    this.icon,
     this.onChange,
     this.controller,
     this.isPassword,
@@ -27,10 +27,13 @@ class Input extends StatelessWidget {
         onChanged: onChange,
         controller: controller,
         cursorColor: Color(0xFF6F35A5),
+        style: TextStyle(
+          color: Colors.white,
+        ),
         decoration: InputDecoration(
           icon: Icon(
             icon,
-            color: Color(0xFF6F35A5),
+            color: Colors.white,
           ),
           hintText: placeholder,
           hintStyle: TextStyle(color: Colors.white),

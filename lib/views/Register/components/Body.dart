@@ -11,17 +11,16 @@ class Body extends StatelessWidget {
   final TextEditingController passwordController;
   final Function onPress;
 
-  Body(
-      {Key key,
-      this.nameController,
-      this.emailController,
-      this.passwordController,
-      this.onPress})
-      : super(key: key);
+  Body({
+    Key key,
+    this.nameController,
+    this.emailController,
+    this.passwordController,
+    this.onPress,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
         child: Column(
@@ -34,18 +33,21 @@ class Body extends StatelessWidget {
                   isEmail: false,
                   placeholder: 'Imię',
                   controller: nameController,
+                  icon: Icons.person,
                 ),
                 Input(
                   isPassword: false,
                   isEmail: true,
                   placeholder: 'E-mail',
                   controller: emailController,
+                  icon: Icons.email,
                 ),
                 Input(
                   isPassword: true,
                   isEmail: false,
                   placeholder: 'Hasło',
                   controller: passwordController,
+                  icon: Icons.security,
                 ),
                 Button(
                   text: 'Zarejestruj się',
@@ -54,8 +56,6 @@ class Body extends StatelessWidget {
               ],
             ),
             SocialDivider(),
-            // SizedBox(height: size.height * 0.03),
-            // SocialDivider(),
           ],
         ),
       ),
