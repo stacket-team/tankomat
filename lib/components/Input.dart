@@ -26,7 +26,7 @@ class Input extends StatelessWidget {
         keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
         onChanged: onChange,
         controller: controller,
-        cursorColor: Color(0xFF6F35A5),
+        cursorColor: Colors.white,
         style: TextStyle(
           color: Colors.white,
         ),

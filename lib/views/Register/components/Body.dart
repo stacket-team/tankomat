@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/components/Form.dart';
+import 'package:tankomat/components/SocialIcon.dart';
 import 'package:tankomat/views/Register/components/Background.dart';
 import 'package:tankomat/views/Register/components/SocialDivider.dart';
 import 'package:tankomat/components/Button.dart';
@@ -56,6 +57,11 @@ class Body extends StatelessWidget {
               ],
             ),
             SocialDivider(),
+            // TODO Fix svg not showing
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: <Widget>[],
+            // ),
           ],
         ),
       ),

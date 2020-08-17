@@ -18,7 +18,7 @@ class Button extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
-      width: size.width * 0.4,
+      width: size.width * 0.6,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(29),
         child: RaisedButton(
