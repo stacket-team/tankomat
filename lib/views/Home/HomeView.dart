@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tankomat/views/HomeView/DashboardView.dart';
-import 'package:tankomat/views/HomeView/SomeView.dart';
-import 'package:tankomat/views/HomeView/map.dart';
+import 'package:tankomat/views/Dashboard/DashboardView.dart';
+import 'package:tankomat/views/Calendar/CalendarView.dart';
+import 'package:tankomat/views/Map/MapView.dart';
 import 'package:tankomat/views/Profile/ProfileView.dart';
 
 class HomeView extends StatefulWidget {
@@ -15,7 +15,7 @@ class _HomeState extends State<HomeView> {
     DashboardView(),
     MapView(),
     ProfileView(),
-    SomeView(),
+    CalendarView(),
   ];
 
   Widget currentView = DashboardView();
@@ -60,7 +60,7 @@ class _HomeState extends State<HomeView> {
                           color: currentTab == 0 ? Colors.blue : Colors.grey,
                         ),
                         Text(
-                          'Dashboard',
+                          'Panel',
                           style: TextStyle(
                             color: currentTab == 0 ? Colors.blue : Colors.grey,
                           ),
@@ -84,7 +84,7 @@ class _HomeState extends State<HomeView> {
                           color: currentTab == 1 ? Colors.blue : Colors.grey,
                         ),
                         Text(
-                          'Map',
+                          'Mapa',
                           style: TextStyle(
                             color: currentTab == 1 ? Colors.blue : Colors.grey,
                           ),
@@ -100,7 +100,7 @@ class _HomeState extends State<HomeView> {
                     minWidth: 40.0,
                     onPressed: () {
                       setState(() {
-                        currentView = SomeView();
+                        currentView = CalendarView();
                         currentTab = 2;
                       });
                     },
@@ -112,7 +112,7 @@ class _HomeState extends State<HomeView> {
                           color: currentTab == 2 ? Colors.blue : Colors.grey,
                         ),
                         Text(
-                          'SomeView',
+                          'Kalendarz',
                           style: TextStyle(
                             color: currentTab == 2 ? Colors.blue : Colors.grey,
                           ),
@@ -136,7 +136,7 @@ class _HomeState extends State<HomeView> {
                           color: currentTab == 3 ? Colors.blue : Colors.grey,
                         ),
                         Text(
-                          'Profile',
+                          'Profil',
                           style: TextStyle(
                             color: currentTab == 3 ? Colors.blue : Colors.grey,
                           ),
