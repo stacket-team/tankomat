@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tankomat/views/VerifyEmail/compontents/Body.dart';
+import 'package:tankomat/views/VerifyEmail/components/Body.dart';
 import 'package:tankomat/utils.dart';
 
 class VerifyEmailView extends StatelessWidget {

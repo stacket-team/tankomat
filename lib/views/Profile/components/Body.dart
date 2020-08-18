@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tankomat/views/Profile/components/Background.dart';
+import 'package:tankomat/components/Background.dart';
 import 'package:tankomat/components/Button.dart';
 
 class Body extends StatelessWidget {

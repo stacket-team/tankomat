@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/components/Button.dart';
-import 'package:tankomat/views/VerifyEmail/compontents/Background.dart';
+import 'package:tankomat/components/Background.dart';
 
 class Body extends StatelessWidget {
   final Function onSendValidationEmailPress;

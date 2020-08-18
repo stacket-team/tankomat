@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/components/Form.dart';
-import 'package:tankomat/views/Login/components/Background.dart';
+import 'package:tankomat/components/Background.dart';
 import 'package:tankomat/views/Login/components/DontHaveAnAccount.dart';
 import 'package:tankomat/components/Button.dart';
 import 'package:tankomat/components/Input.dart';
