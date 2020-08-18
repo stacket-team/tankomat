@@ -4,7 +4,6 @@ import 'package:tankomat/components/Background.dart';
 import 'package:tankomat/views/Login/components/DontHaveAnAccount.dart';
 import 'package:tankomat/components/Button.dart';
 import 'package:tankomat/components/Input.dart';
-import 'package:tankomat/components/Input.dart';
 
 class Body extends StatelessWidget {
   final TextEditingController emailController;
@@ -40,15 +39,14 @@ class Body extends StatelessWidget {
                   isEmail: true,
                   placeholder: 'E-mail',
                   controller: emailController,
-                  icon: Icons.person,
-                ),
-                Input(
-                  isPassword: true,
-                  isEmail: false,
-                  placeholder: 'Hasło',
-                  controller: passwordController,
                   icon: Icons.email,
                 ),
+                Input(
+                    isPassword: true,
+                    isEmail: false,
+                    placeholder: 'Hasło',
+                    controller: passwordController,
+                    icon: Icons.security),
                 Button(
                   text: 'Zaloguj się',
                   press: onPress,

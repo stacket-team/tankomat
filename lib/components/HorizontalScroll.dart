@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-class HorizontalScrollComponent extends StatefulWidget {
+class HorizontalScroll extends StatefulWidget {
   @override
-  _HorizontalScrollComponentState createState() =>
-      _HorizontalScrollComponentState();
+  _HorizontalScrollState createState() => _HorizontalScrollState();
 }
 
-class _HorizontalScrollComponentState extends State<HorizontalScrollComponent> {
+class _HorizontalScrollState extends State<HorizontalScroll> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,10 +14,6 @@ class _HorizontalScrollComponentState extends State<HorizontalScrollComponent> {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
-          ScrollTile(),
-          ScrollTile(),
-          ScrollTile(),
-          ScrollTile(),
           ScrollTile(),
           ScrollTile(),
           ScrollTile(),
@@ -36,10 +31,10 @@ class ScrollTile extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 3),
       width: MediaQuery.of(context).size.width * (6 / 18) - 20,
-      height: MediaQuery.of(context).size.width * 0.2,
+      height: MediaQuery.of(context).size.width * 0.3,
       margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.013),
-      decoration: new BoxDecoration(
-        borderRadius: new BorderRadius.circular(16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
         color: Colors.green,
       ),
     );
