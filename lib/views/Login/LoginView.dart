@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tankomat/views/Login/components/Body.dart';
 import 'package:tankomat/utils.dart';
+import 'package:firebase/firebase.dart' as firebase;
 
 class LoginView extends StatefulWidget {
   @override
@@ -26,15 +29,28 @@ class _LoginViewState extends State<LoginView> {
         emailController: emailController,
         passwordController: passwordController,
         onPress: () async {
-          try {
-            // TODO Validate email and password
-            String email = emailController.text;
-            String password = passwordController.text;
+          // TODO Validate email and password
+          String email = emailController.text;
+          String password = passwordController.text;
 
+          try {
             await loginUser(email, password);
           } catch (e) {
             // TODO Add error message display
             print(e.toString());
+            if (e.code == 'auth/wrong-password') {
+              List<String> methods = await getLoginMethods(email);
+              if (methods.contains('password') == false) {
+                Navigator.of(context).pushNamed(
+                  '/linkCredentials',
+                  arguments: {
+                    'email': email,
+                    'credential': {'password': password},
+                    'providerString': 'hasłem',
+                  },
+                );
+              }
+            }
           }
         },
       ),

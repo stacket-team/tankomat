@@ -29,8 +29,6 @@ class _RegsiterViewState extends State<RegisterView> {
         emailController: emailController,
         passwordController: passwordController,
         onPress: () async {
-          bool trySignin = false;
-
           // TODO Validate email and password
           String name = nameController.text;
           String email = emailController.text;
@@ -40,20 +38,34 @@ class _RegsiterViewState extends State<RegisterView> {
             await createUser(name, email, password);
           } on firebase.FirebaseError catch (e) {
             if (e.code == 'auth/email-already-in-use') {
-              trySignin = true;
+              Navigator.of(context).pushNamed(
+                '/linkCredentials',
+                arguments: {
+                  'email': email,
+                  'credential': {'password': password},
+                  'providerString': 'hasłem',
+                },
+              );
             }
           } catch (e) {
             // TODO Add error message display
             print(e.toString());
           }
-
-          if (trySignin) {
-            try {
-              await loginUser(email, password);
-            } catch (e) {
-              // TODO Add error message display
-              print(e.toString());
-            }
+        },
+        onGooglePress: () async {
+          try {
+            await loginUserWithGoogle(context);
+          } catch (e) {
+            // TODO Add error message display
+            print(e.toString());
+          }
+        },
+        onFacebookPress: () async {
+          try {
+            await loginUserWithFacebook(context);
+          } catch (e) {
+            // TODO Add error message display
+            print(e.toString());
           }
         },
       ),

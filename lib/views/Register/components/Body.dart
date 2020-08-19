@@ -11,6 +11,8 @@ class Body extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final Function onPress;
+  final Function onGooglePress;
+  final Function onFacebookPress;
 
   Body({
     Key key,
@@ -18,6 +20,8 @@ class Body extends StatelessWidget {
     this.emailController,
     this.passwordController,
     this.onPress,
+    this.onGooglePress,
+    this.onFacebookPress,
   }) : super(key: key);
 
   @override
@@ -57,11 +61,19 @@ class Body extends StatelessWidget {
               ],
             ),
             SocialDivider(),
-            // TODO Fix svg not showing
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: <Widget>[],
-            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SocialIcon(
+                  iconSrc: 'google.png',
+                  press: onGooglePress,
+                ),
+                SocialIcon(
+                  iconSrc: 'facebook.png',
+                  press: onFacebookPress,
+                ),
+              ],
+            ),
           ],
         ),
       ),

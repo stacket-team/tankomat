@@ -50,25 +50,88 @@ Future<bool> confirmEmailVerified() async {
   return auth.currentUser.emailVerified;
 }
 
-Future<void> loginUser(String email, String password) {
+Future<firebase.UserCredential> loginUser(String email, String password) {
   firebase.Auth auth = firebase.auth();
   return auth.signInWithEmailAndPassword(email, password);
 }
 
-Future<void> createUser(String name, String email, String password) async {
+Future<void> loginUserWithGoogle(BuildContext context) {
+  return loginUserWithProvider(context, firebase.GoogleAuthProvider());
+}
+
+Future<void> loginUserWithFacebook(BuildContext context) {
+  return loginUserWithProvider(context, firebase.FacebookAuthProvider());
+}
+
+Future<void> loginUserWithProvider(
+    BuildContext context, firebase.AuthProvider provider) async {
   firebase.Auth auth = firebase.auth();
+  try {
+    firebase.UserCredential userCredential =
+        await auth.signInWithPopup(provider);
+    if (userCredential.additionalUserInfo.isNewUser) {
+      String name;
+      if (provider is firebase.GoogleAuthProvider) {
+        name = userCredential.additionalUserInfo.profile['given_name'];
+      } else if (provider is firebase.FacebookAuthProvider) {
+        name = 'FacebookName';
+        print(userCredential.additionalUserInfo.username);
+        print(userCredential.additionalUserInfo.profile);
+      }
+      await createUserData(
+        userCredential.user.uid,
+        name,
+      );
+    }
+  } catch (e) {
+    if (e.code == 'auth/account-exists-with-different-credential') {
+      Map<dynamic, String> providersStrings = {
+        firebase.GoogleAuthProvider: 'przez Google',
+        firebase.FacebookAuthProvider: 'przez Facebook',
+      };
+      Navigator.of(context).pushNamed(
+        '/linkCredentials',
+        arguments: {
+          'email': e.email,
+          'credential': e.credential,
+          'providerString': providersStrings[provider],
+        },
+      );
+    } else {
+      throw e;
+    }
+  }
+}
+
+Future<List<String>> getLoginMethods(String email) {
+  firebase.Auth auth = firebase.auth();
+  return auth.fetchSignInMethodsForEmail(email);
+}
+
+Future<void> linkCredentials(dynamic credential) {
+  firebase.Auth auth = firebase.auth();
+  return credential is firebase.OAuthCredential
+      ? auth.currentUser.linkWithCredential(credential)
+      : auth.currentUser.updatePassword(credential['password']);
+}
+
+Future<void> createUserData(String uid, String name) {
   firestore.CollectionReference ref = firebase.firestore().collection('/users');
-
-  firebase.UserCredential userCredential =
-      await auth.createUserWithEmailAndPassword(email, password);
-
   Map<String, dynamic> userData = {
     'name': name,
     'type': null,
     'history': [],
   };
+  return ref.doc(uid).set(userData);
+}
 
-  await ref.doc(userCredential.user.uid).set(userData);
+Future<void> createUser(String name, String email, String password) async {
+  firebase.Auth auth = firebase.auth();
+
+  firebase.UserCredential userCredential =
+      await auth.createUserWithEmailAndPassword(email, password);
+
+  await createUserData(userCredential.user.uid, name);
 
   await sendEmailVerification();
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tankomat/constants.dart';
 import '../constants.dart';
 
@@ -23,10 +22,8 @@ class SocialIcon extends StatelessWidget {
           border: Border.all(width: 1, color: PRIMARY_COLOR),
           shape: BoxShape.circle,
         ),
-        child: SvgPicture.asset(
-          iconSrc,
-          width: 20,
-          height: 20,
+        child: Image(
+          image: AssetImage(iconSrc),
         ),
       ),
     );
