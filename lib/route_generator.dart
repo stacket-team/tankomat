@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/views/Loading/LoadingView.dart';
 import 'package:tankomat/views/VerifyEmail/VerifyEmailView.dart';
 import 'package:tankomat/views/LinkCredentials/LinkCredentailsView.dart';
 import 'views/Home/HomeView.dart';
@@ -36,6 +37,8 @@ class RouteGenerator {
         return InstantPageRoute(builder: (_) => VerifyEmailView());
       case '/linkCredentials':
         return InstantPageRoute(builder: (_) => LinkCredentialsView(args));
+      case '/loading':
+        return InstantPageRoute(builder: (_) => LoadingView());
       default:
         // If there is no such named route in the switch statement
         return _errorRoute();

@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:tankomat/views/Login/components/Body.dart';
 import 'package:tankomat/utils.dart';
-import 'package:firebase/firebase.dart' as firebase;
 
 class LoginView extends StatefulWidget {
   @override
@@ -23,7 +20,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    initializeAuth(context);
     return Scaffold(
       body: Body(
         emailController: emailController,

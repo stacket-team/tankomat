@@ -16,8 +16,33 @@
 
   <title>Tankomat</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+    }
+    #splash-screen {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+      color: black;
+      height: 100%;
+    }
+    #splash-screen * {
+      text-align: center;
+      margin: 1em 0;
+    }
+  </style>
 </head>
 <body>
+  <div id="splash-screen">
+    <img src="icons/logo-192.png" alt="Logo">
+    <h1>Tankomat</h1>
+    <p>Wczytywanie aplikacji</p>
+  </div>
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-analytics.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
