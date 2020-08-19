@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/views/VerifyEmail/VerifyEmailView.dart';
-import 'package:tankomat/views/linkCredentials/LinkCredentailsView.dart';
+import 'package:tankomat/views/LinkCredentials/LinkCredentailsView.dart';
 import 'views/Home/HomeView.dart';
 import 'views/Login/LoginView.dart';
 import 'views/Register/RegisterView.dart';
