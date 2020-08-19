@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/views/ForgotPassword/ForgotPasswordView.dart';
 import 'package:tankomat/views/Loading/LoadingView.dart';
 import 'package:tankomat/views/VerifyEmail/VerifyEmailView.dart';
 import 'package:tankomat/views/LinkCredentials/LinkCredentailsView.dart';
@@ -37,6 +38,8 @@ class RouteGenerator {
         return InstantPageRoute(builder: (_) => VerifyEmailView());
       case '/linkCredentials':
         return InstantPageRoute(builder: (_) => LinkCredentialsView(args));
+      case '/forgotPassword':
+        return InstantPageRoute(builder: (_) => ForgotPasswordView(args));
       case '/loading':
         return InstantPageRoute(builder: (_) => LoadingView());
       default:

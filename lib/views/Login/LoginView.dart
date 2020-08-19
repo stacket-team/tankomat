@@ -49,6 +49,28 @@ class _LoginViewState extends State<LoginView> {
             }
           }
         },
+        onGooglePress: () async {
+          try {
+            await loginUserWithGoogle(context);
+          } catch (e) {
+            // TODO Add error message display
+            print(e.toString());
+          }
+        },
+        onFacebookPress: () async {
+          try {
+            await loginUserWithFacebook(context);
+          } catch (e) {
+            // TODO Add error message display
+            print(e.toString());
+          }
+        },
+        onForgotPasswordPress: () {
+          Navigator.of(context).pushNamed(
+            '/forgotPassword',
+            arguments: {'email': emailController.text},
+          );
+        },
       ),
     );
   }

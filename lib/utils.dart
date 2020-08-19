@@ -115,6 +115,11 @@ Future<void> linkCredentials(dynamic credential) {
       : auth.currentUser.updatePassword(credential['password']);
 }
 
+Future<void> resetPassword(String email) {
+  firebase.Auth auth = firebase.auth();
+  return auth.sendPasswordResetEmail(email);
+}
+
 Future<void> createUserData(String uid, String name) {
   firestore.CollectionReference ref = firebase.firestore().collection('/users');
   Map<String, dynamic> userData = {
