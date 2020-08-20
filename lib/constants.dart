@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-const PRIMARY_COLOR = Color(0xFF6F35A5);
+const PRIMARY_COLOR = Color(0xFFFF9800);
+const SECONDARY_COLOR = Color(0xFFFFCC80);
 
 const API_KEY = "AIzaSyBbwYoP_4GbmZ8bloCmOX1xiQr40nmIeU0";
 const AUTH_DOMAIN = "stacket-tankomat.firebaseapp.com";

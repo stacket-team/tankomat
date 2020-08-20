@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/components/BottomSheetWidget.dart';
+import 'package:tankomat/components/FloatingActionButton.dart';
 import 'package:tankomat/views/Dashboard/DashboardView.dart';
 import 'package:tankomat/views/Calendar/CalendarView.dart';
 import 'package:tankomat/views/Home/components/NavigationButton.dart';
@@ -27,6 +29,13 @@ class _HomeState extends State<HomeView> {
     });
   }
 
+  PersistentBottomSheetController handleFabButtonPress(context) {
+    return showBottomSheet(
+      context: context,
+      builder: (context) => BottomSheetWidget(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,18 +43,15 @@ class _HomeState extends State<HomeView> {
         child: tabs[currentTab],
         bucket: bucket,
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.orangeAccent,
-        onPressed: () {},
-      ),
+      floatingActionButton:
+          AddInfoButton(handleFabButtonPress: handleFabButtonPress),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         child: Container(
           height: 60.0,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Row(
                 children: <Widget>[

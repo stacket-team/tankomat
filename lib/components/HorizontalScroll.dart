@@ -35,7 +35,7 @@ class ScrollTile extends StatelessWidget {
       margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.013),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
-        color: Colors.green,
+        color: Colors.grey[300],
       ),
     );
   }
