@@ -120,6 +120,33 @@ Future<void> resetPassword(String email) {
   return auth.sendPasswordResetEmail(email);
 }
 
+Future<void> unlinkGoogle() {
+  return unlinkProvider('google.com');
+}
+
+Future<void> linkGoogle() {
+  firebase.Auth auth = firebase.auth();
+  return auth.currentUser.linkWithPopup(firebase.GoogleAuthProvider());
+}
+
+Future<void> unlinkFacebook() {
+  return unlinkProvider('facebook.com');
+}
+
+Future<void> linkFacebook() {
+  firebase.Auth auth = firebase.auth();
+  return auth.currentUser.linkWithPopup(firebase.FacebookAuthProvider());
+}
+
+Future<void> unlinkPassword() {
+  return unlinkProvider('password');
+}
+
+Future<void> unlinkProvider(String provider) {
+  firebase.Auth auth = firebase.auth();
+  return auth.currentUser.unlink(provider);
+}
+
 Future<void> createUserData(String uid, String name) {
   firestore.CollectionReference ref = firebase.firestore().collection('/users');
   Map<String, dynamic> userData = {
