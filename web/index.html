@@ -48,11 +48,8 @@
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js"></script>
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('flutter_service_worker.js');
-      });
-    }
+    if ('serviceWorker' in navigator) 
+      window.addEventListener('load',  () => navigator.serviceWorker.register('sw.js'));
   </script>
   <script src="main.dart.js" type="application/javascript"></script>
 </body>
