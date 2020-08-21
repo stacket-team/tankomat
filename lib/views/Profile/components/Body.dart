@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:tankomat/components/Background.dart';
 import 'package:tankomat/components/Button.dart';
 import 'package:tankomat/components/Loading.dart';
+import 'package:tankomat/views/Profile/components/Avatar.dart';
 import 'package:tankomat/views/Profile/components/Provider.dart';
 
 class Body extends StatelessWidget {
   final Function onLogoutPress;
-  final bool areProvidersLoading;
+  final bool isLoading;
   final List<String> providers;
+  final String username;
+  final String avatarURL;
   final Function onUnlinkPasswordPress;
   final Function onLinkPasswordPress;
   final Function onUnlinkGooglePress;
@@ -18,7 +21,9 @@ class Body extends StatelessWidget {
   Body({
     Key key,
     this.onLogoutPress,
-    this.areProvidersLoading,
+    this.isLoading,
+    this.username,
+    this.avatarURL,
     this.providers,
     this.onUnlinkPasswordPress,
     this.onLinkPasswordPress,
@@ -32,9 +37,17 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> children = [];
 
-    if (areProvidersLoading) {
+    if (isLoading) {
       children.add(Loading());
     } else {
+      children.add(Avatar(
+        onPress: () {
+          // TODO Navigate to custom avatar view
+        },
+        url: avatarURL,
+      ));
+      children.add(Text(username));
+
       if (providers.contains('password')) {
         children.add(Provider(
           name: 'Odłącz hasło',
