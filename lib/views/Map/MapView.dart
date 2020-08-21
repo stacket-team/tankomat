@@ -10,6 +10,7 @@ class _MapState extends State<MapView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
         title: Text('Mapa'),
       ),
     );

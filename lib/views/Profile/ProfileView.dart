@@ -32,6 +32,7 @@ class _ProfileState extends State<ProfileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
         title: Text('Profil'),
       ),
       body: Body(

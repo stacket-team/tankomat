@@ -16,17 +16,24 @@ class Provider extends StatelessWidget {
     return FlatButton(
       onPressed: onPress,
       padding: EdgeInsets.all(10.0),
+      // child: Center(
       child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image(
-            image: AssetImage(imageSrc),
-            width: 32,
-            height: 32,
-            isAntiAlias: true,
+          Container(
+            margin: EdgeInsets.only(right: 10.0),
+            child: Image(
+              image: AssetImage(imageSrc),
+              width: 32,
+              height: 32,
+              isAntiAlias: true,
+            ),
           ),
           Text(name),
         ],
       ),
+      // ),
     );
   }
 }

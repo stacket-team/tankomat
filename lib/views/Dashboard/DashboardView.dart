@@ -12,6 +12,7 @@ class _DashboardViewState extends State<DashboardView> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
         title: Text('dashboard'),
       ),
       body: Column(

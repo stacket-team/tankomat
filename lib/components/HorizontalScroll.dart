@@ -30,7 +30,7 @@ class ScrollTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 3),
-      width: MediaQuery.of(context).size.width * (6 / 18) - 20,
+      width: MediaQuery.of(context).size.width * (1 / 3) - 20,
       height: MediaQuery.of(context).size.width * 0.3,
       margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.013),
       decoration: BoxDecoration(
