@@ -147,6 +147,11 @@ Future<void> unlinkProvider(String provider) {
   return auth.currentUser.unlink(provider);
 }
 
+Future<firestore.DocumentSnapshot> getUserData(String uid) {
+  firestore.CollectionReference ref = firebase.firestore().collection('/users');
+  return ref.doc(uid).get();
+}
+
 Future<void> createUserData(String uid, String name) {
   firestore.CollectionReference ref = firebase.firestore().collection('/users');
   Map<String, dynamic> userData = {

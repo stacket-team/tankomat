@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tankomat/views/Profile/components/Body.dart';
 import 'package:tankomat/utils.dart';
 import 'package:firebase/firebase.dart' as firebase;
+import 'package:firebase/firestore.dart' as firestore;
 
 class ProfileView extends StatefulWidget {
   @override
@@ -9,6 +10,7 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileState extends State<ProfileView> {
+  String name = '';
   List<String> providers = [];
   final firebase.Auth auth;
 
@@ -18,8 +20,11 @@ class _ProfileState extends State<ProfileView> {
 
   void getProviders() async {
     try {
+      firestore.DocumentSnapshot userData =
+          await getUserData(auth.currentUser.uid);
       List<String> _providers = await getLoginMethods(auth.currentUser.email);
       setState(() {
+        name = userData.get('name');
         providers = _providers;
       });
     } catch (e) {
@@ -44,7 +49,9 @@ class _ProfileState extends State<ProfileView> {
             print(e.toString());
           }
         },
-        areProvidersLoading: providers.isEmpty,
+        username: name,
+        avatarURL: auth.currentUser.photoURL,
+        isLoading: providers.isEmpty,
         providers: providers,
         onLinkPasswordPress: () async {
           try {

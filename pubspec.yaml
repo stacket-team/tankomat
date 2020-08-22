@@ -66,6 +66,7 @@ flutter:
     - loading.gif
     - logo.png
     - password.png
+    - avatar.png
   fonts:
     - family: Montserrat
       fonts:
