@@ -186,6 +186,7 @@ class User extends Events {
   }
 
   Future<void> loadData() async {
+    // TODO Auto reload data on snapshot listener
     snapshot = await ref.get();
     name = snapshot.get('name');
   }
@@ -210,6 +211,20 @@ class User extends Events {
 
     Map<String, dynamic> userData = {
       'name': name,
+      'draft': {
+        'timestamp': firestore.FieldValue.serverTimestamp(),
+        'name': '',
+        'elements': [],
+        'lastID': 0,
+        'tags': [],
+      },
+      'trainings': [],
+      'schedules': [],
+      'following': [],
+      'followers': [],
+      'friends': [],
+      'friendsRequests': [],
+      'receiveFriendsRequests': true,
     };
 
     return ref.doc(uid).set(userData);

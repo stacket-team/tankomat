@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as firebase;
 import 'package:tankomat/utils.dart';
+import 'package:tankomat/views/AddTraining/AddTrainingView.dart';
 import 'views/ForgotPassword/ForgotPasswordView.dart';
 import 'views/Loading/LoadingView.dart';
 import 'views/VerifyEmail/VerifyEmailView.dart';
@@ -55,6 +56,8 @@ class RouteGenerator {
             return ForgotPasswordView(auth, settings.arguments);
           case '/loading':
             return LoadingView();
+          case '/add':
+            return AddTrainingView(user);
           default:
             return errorRoute();
         }
@@ -65,7 +68,10 @@ class RouteGenerator {
 
   static Widget errorRoute() {
     return Scaffold(
-      appBar: AppBar(title: Text('Error 404')),
+      appBar: AppBar(
+        title: Text('Error 404'),
+        leading: Container(),
+      ),
       body: Center(
         child: Text('Error 404 - Not found'),
       ),
