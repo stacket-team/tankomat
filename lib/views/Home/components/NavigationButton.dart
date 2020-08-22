@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class NavigationButton extends StatelessWidget {
   final String viewName;
-  int currentTab = 0;
+  final int currentTab;
   final int tabIndex;
   final Function handleTabChange;
   final IconData iconName;
+
   NavigationButton({
     Key key,
     this.viewName,
@@ -18,6 +18,7 @@ class NavigationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color color = currentTab == tabIndex ? Colors.blue : Colors.grey;
     return MaterialButton(
       minWidth: 40.0,
       onPressed: () {
@@ -28,12 +29,12 @@ class NavigationButton extends StatelessWidget {
         children: <Widget>[
           Icon(
             iconName,
-            color: currentTab == tabIndex ? Colors.blue : Colors.grey,
+            color: color,
           ),
           Text(
             viewName,
             style: TextStyle(
-              color: currentTab == tabIndex ? Colors.blue : Colors.grey,
+              color: color,
             ),
           )
         ],
