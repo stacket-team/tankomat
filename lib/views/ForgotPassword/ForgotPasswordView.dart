@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/views/ForgotPassword/compontents/Body.dart';
-import 'package:tankomat/utils.dart';
+import 'package:tankomat/utils.dart' show Auth;
 
 class ForgotPasswordView extends StatefulWidget {
+  final Auth auth;
   final Map arguments;
 
-  ForgotPasswordView(this.arguments);
+  ForgotPasswordView(this.auth, this.arguments);
 
   @override
-  _ForgotPasswordViewState createState() => _ForgotPasswordViewState(arguments);
+  _ForgotPasswordViewState createState() =>
+      _ForgotPasswordViewState(auth, arguments);
 }
 
 class _ForgotPasswordViewState extends State<ForgotPasswordView> {
+  final Auth auth;
   final Map arguments;
   final TextEditingController emailController;
 
-  _ForgotPasswordViewState(this.arguments)
+  _ForgotPasswordViewState(this.auth, this.arguments)
       : emailController = TextEditingController(text: arguments['email']);
 
   @override
@@ -31,7 +34,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         emailController: emailController,
         onSendPress: () async {
           try {
-            await resetPassword(emailController.text);
+            await auth.resetPassword(emailController.text);
             Navigator.of(context).pushNamed('/login');
           } catch (e) {
             // TODO Add error display

@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:tankomat/utils.dart';
+import 'package:tankomat/utils.dart' show Auth;
 import 'package:tankomat/views/Register/components/Body.dart';
 import 'package:firebase/firebase.dart' as firebase;
 
 class RegisterView extends StatefulWidget {
+  final Auth auth;
+
+  RegisterView(this.auth);
+
   @override
-  _RegsiterViewState createState() => _RegsiterViewState();
+  _RegsiterViewState createState() => _RegsiterViewState(auth);
 }
 
 class _RegsiterViewState extends State<RegisterView> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final Auth auth;
+
+  _RegsiterViewState(this.auth);
 
   @override
   void dispose() {
@@ -35,7 +42,7 @@ class _RegsiterViewState extends State<RegisterView> {
           String password = passwordController.text;
 
           try {
-            await createUser(name, email, password);
+            await auth.createUser(name, email, password);
           } on firebase.FirebaseError catch (e) {
             if (e.code == 'auth/email-already-in-use') {
               Navigator.of(context).pushNamed(
@@ -54,7 +61,7 @@ class _RegsiterViewState extends State<RegisterView> {
         },
         onGooglePress: () async {
           try {
-            await loginUserWithGoogle(context);
+            await auth.loginUserWithGoogle(context);
           } catch (e) {
             // TODO Add error message display
             print(e.toString());
@@ -62,7 +69,7 @@ class _RegsiterViewState extends State<RegisterView> {
         },
         onFacebookPress: () async {
           try {
-            await loginUserWithFacebook(context);
+            await auth.loginUserWithFacebook(context);
           } catch (e) {
             // TODO Add error message display
             print(e.toString());

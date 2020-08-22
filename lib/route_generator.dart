@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tankomat/views/ForgotPassword/ForgotPasswordView.dart';
-import 'package:tankomat/views/Loading/LoadingView.dart';
-import 'package:tankomat/views/VerifyEmail/VerifyEmailView.dart';
-import 'package:tankomat/views/LinkCredentials/LinkCredentailsView.dart';
+import 'package:firebase/firebase.dart' as firebase;
+import 'package:tankomat/utils.dart';
+import 'views/ForgotPassword/ForgotPasswordView.dart';
+import 'views/Loading/LoadingView.dart';
+import 'views/VerifyEmail/VerifyEmailView.dart';
+import 'views/LinkCredentials/LinkCredentailsView.dart';
 import 'views/Home/HomeView.dart';
 import 'views/Login/LoginView.dart';
 import 'views/Register/RegisterView.dart';
@@ -23,39 +25,50 @@ class InstantPageRoute<T> extends MaterialPageRoute<T> {
 }
 
 class RouteGenerator {
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    // Getting arguments passed in while calling Navigator.pushNamed
-    final args = settings.arguments;
+  static Auth auth;
+  static User user;
 
-    switch (settings.name) {
-      case '/':
-        return InstantPageRoute(builder: (_) => HomeView());
-      case '/login':
-        return InstantPageRoute(builder: (_) => LoginView());
-      case '/register':
-        return InstantPageRoute(builder: (_) => RegisterView());
-      case '/verifyEmail':
-        return InstantPageRoute(builder: (_) => VerifyEmailView());
-      case '/linkCredentials':
-        return InstantPageRoute(builder: (_) => LinkCredentialsView(args));
-      case '/forgotPassword':
-        return InstantPageRoute(builder: (_) => ForgotPasswordView(args));
-      case '/loading':
-        return InstantPageRoute(builder: (_) => LoadingView());
-      default:
-        // If there is no such named route in the switch statement
-        return _errorRoute();
-    }
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    return InstantPageRoute(
+      builder: (context) {
+        if (auth == null) {
+          auth = initializeAuth(
+            context,
+            (firebase.User firebaseUser) {
+              user = User(firebaseUser, auth);
+            },
+          );
+        }
+
+        switch (settings.name) {
+          case '/':
+            return HomeView(auth, user);
+          case '/login':
+            return LoginView(auth);
+          case '/register':
+            return RegisterView(auth);
+          case '/verifyEmail':
+            return VerifyEmailView(auth);
+          case '/linkCredentials':
+            return LinkCredentialsView(auth, settings.arguments);
+          case '/forgotPassword':
+            return ForgotPasswordView(auth, settings.arguments);
+          case '/loading':
+            return LoadingView();
+          default:
+            return errorRoute();
+        }
+      },
+      settings: settings,
+    );
   }
 
-  static Route<dynamic> _errorRoute() {
-    return InstantPageRoute(builder: (_) {
-      return Scaffold(
-        appBar: AppBar(title: Text('Error')),
-        body: Center(
-          child: Text('ERROR'),
-        ),
-      );
-    });
+  static Widget errorRoute() {
+    return Scaffold(
+      appBar: AppBar(title: Text('Error 404')),
+      body: Center(
+        child: Text('Error 404 - Not found'),
+      ),
+    );
   }
 }

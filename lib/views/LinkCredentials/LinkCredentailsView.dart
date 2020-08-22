@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/views/LinkCredentials/components/Body.dart';
 import 'package:firebase/firebase.dart' as firebase;
-import 'package:tankomat/utils.dart';
+import 'package:tankomat/utils.dart' show Auth;
 
 class LinkCredentialsView extends StatefulWidget {
+  final Auth auth;
   final Map arguments;
 
-  LinkCredentialsView(this.arguments);
+  LinkCredentialsView(this.auth, this.arguments);
 
   @override
   _LinkCredentialsViewState createState() =>
-      _LinkCredentialsViewState(arguments);
+      _LinkCredentialsViewState(auth, arguments);
 }
 
 class _LinkCredentialsViewState extends State<LinkCredentialsView> {
   final TextEditingController passwordController = TextEditingController();
+  final Auth auth;
   final Map arguments;
   bool loading = true;
   List<String> methods = [];
 
-  _LinkCredentialsViewState(this.arguments) {
+  _LinkCredentialsViewState(this.auth, this.arguments) {
     getMethods();
   }
 
   void getMethods() async {
-    List<String> _methods = await getLoginMethods(arguments['email']);
+    List<String> _methods = await auth.getLoginMethods(arguments['email']);
     setState(() {
       methods = _methods;
       loading = false;
@@ -48,8 +50,8 @@ class _LinkCredentialsViewState extends State<LinkCredentialsView> {
         passwordController: passwordController,
         onPasswordLogin: () async {
           try {
-            await loginUser(arguments['email'], passwordController.text);
-            await linkCredentials(arguments['credential']);
+            await auth.loginUser(arguments['email'], passwordController.text);
+            await auth.linkCredentials(arguments['credential']);
           } on firebase.FirebaseError catch (e) {
             // TODO Add error display
             print(e.toString());
@@ -57,8 +59,8 @@ class _LinkCredentialsViewState extends State<LinkCredentialsView> {
         },
         onGoogleLogin: () async {
           try {
-            await loginUserWithGoogle(context);
-            await linkCredentials(arguments['credential']);
+            await auth.loginUserWithGoogle(context);
+            await auth.linkCredentials(arguments['credential']);
           } catch (e) {
             // TODO Add error display
             print(e.toString());
@@ -66,8 +68,8 @@ class _LinkCredentialsViewState extends State<LinkCredentialsView> {
         },
         onFacebookLogin: () async {
           try {
-            await loginUserWithFacebook(context);
-            await linkCredentials(arguments['credential']);
+            await auth.loginUserWithFacebook(context);
+            await auth.linkCredentials(arguments['credential']);
           } catch (e) {
             // TODO Add error display
             print(e.toString());
