@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:tankomat/components/Background.dart';
 import 'package:tankomat/views/AddTraining/components/ExerciseCard.dart';
 import 'package:tankomat/views/AddTraining/components/ExerciseTarget.dart';
+import 'package:tankomat/views/AddTraining/components/ExerciseTime.dart';
+import 'package:tankomat/views/AddTraining/components/TrainingTime.dart';
 
 class Body extends StatelessWidget {
   final Color saveColor;
   final String saveText;
   final List<Map<String, TextEditingController>> controllers;
+  final List<int> times;
+  final int totalTime;
   final Function onCardMoved;
   final Function onAddFieldPress;
   final Function showTargets;
@@ -18,6 +22,8 @@ class Body extends StatelessWidget {
     this.saveText,
     this.saveColor,
     this.controllers,
+    this.times,
+    this.totalTime,
     this.onCardMoved,
     this.onAddFieldPress,
     this.showTargets,
@@ -62,6 +68,10 @@ class Body extends StatelessWidget {
         hideTargets,
       ));
 
+      if (times.length > entry.key) {
+        children.add(ExerciseTime(times[entry.key], isCardMoving));
+      }
+
       children.add(ExerciseTarget(
         entry.key + 1,
         onCardMoved,
@@ -88,6 +98,8 @@ class Body extends StatelessWidget {
         ),
       ],
     ));
+
+    children.add(TrainingTime(totalTime));
 
     return Background(
       child: SingleChildScrollView(

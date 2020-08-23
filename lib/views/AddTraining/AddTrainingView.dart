@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tankomat/views/AddTraining/components/Body.dart';
-import 'package:tankomat/utils.dart' show User;
+import 'package:tankomat/utils.dart' show User, fixZeros, parseTime;
 import 'package:firebase/firestore.dart' as firestore;
 
 class AddTrainingView extends StatefulWidget {
@@ -20,6 +20,8 @@ class _AddTrainingState extends State<AddTrainingView> {
   String saveText = '';
   bool doSave = false;
   List<dynamic> elements = [];
+  List<int> times = [];
+  int totalTime = 0;
   List<Map<String, TextEditingController>> controllers = [];
   int movingCardID;
 
@@ -51,10 +53,6 @@ class _AddTrainingState extends State<AddTrainingView> {
       }
     }
     super.dispose();
-  }
-
-  String fixZeros(int number) {
-    return number < 10 ? '0' + number.toString() : number.toString();
   }
 
   void getDraft() async {
@@ -91,9 +89,14 @@ class _AddTrainingState extends State<AddTrainingView> {
       _controllers.add(map);
     });
 
+    List<int> _times = _elements.map((e) => e['time'] as int).toList();
+    int _totalTime = _times.reduce((acc, element) => acc + element);
+
     setState(() {
       elements = _elements;
       controllers = _controllers;
+      times = _times;
+      totalTime = _totalTime;
       saveText = _saveText;
       saveColor = Colors.green;
     });
@@ -131,6 +134,11 @@ class _AddTrainingState extends State<AddTrainingView> {
         if (elements[id][key] != controller.text) {
           setState(() {
             elements[id][key] = controller.text;
+            if (key == 'duration') {
+              elements[id]['time'] = parseTime(controller.text);
+              times = elements.map((e) => e['time'] as int).toList();
+              totalTime = times.reduce((acc, element) => acc + element);
+            }
             saveText = '';
             saveColor = Colors.grey;
             doSave = true;
@@ -145,6 +153,8 @@ class _AddTrainingState extends State<AddTrainingView> {
         saveText: saveText,
         saveColor: saveColor,
         controllers: controllers,
+        times: times,
+        totalTime: totalTime,
         onCardMoved: onCardMoved,
         showTargets: showTargets,
         hideTargets: hideTargets,
@@ -157,6 +167,7 @@ class _AddTrainingState extends State<AddTrainingView> {
             'description': '',
             'count': 5,
             'duration': '15 sek',
+            'time': 15,
           });
           await user.ref.update(
             data: {

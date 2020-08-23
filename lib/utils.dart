@@ -1,9 +1,41 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tankomat/constants.dart';
 import 'package:firebase/firebase.dart' as firebase;
 import 'package:firebase/firestore.dart' as firestore;
+
+int parseTime(String text) {
+  int seconds = 0;
+  RegExp timeParser = new RegExp(r"(\d+)\W*([ghms])", caseSensitive: false);
+  Iterable<Match> matches = timeParser.allMatches(text);
+  for (Match match in matches) {
+    int value = int.parse(match.group(1));
+    String specifier = match.group(2).toLowerCase();
+    if (specifier == 'g' || specifier == 'h') {
+      seconds += value * 3600;
+    } else if (specifier == 'm') {
+      seconds += value * 60;
+    } else if (specifier == 's') {
+      seconds += value;
+    }
+  }
+  return seconds;
+}
+
+String secondsToHMS(int time) {
+  int seconds = time % 60;
+  time = ((time - seconds) / 60).floor();
+  int minutes = time % 60;
+  time = ((time - minutes) / 60).floor();
+  int hours = time;
+
+  return hours > 0
+      ? '${fixZeros(hours)}:${fixZeros(minutes)}:${fixZeros(seconds)}'
+      : '${fixZeros(minutes)}:${fixZeros(seconds)}';
+}
+
+String fixZeros(int number) {
+  return number < 10 ? '0' + number.toString() : number.toString();
+}
 
 void initializeFirebase() {
   try {
