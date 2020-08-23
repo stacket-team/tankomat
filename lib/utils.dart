@@ -215,7 +215,6 @@ class User extends Events {
         'timestamp': firestore.FieldValue.serverTimestamp(),
         'name': '',
         'elements': [],
-        'lastID': 0,
         'tags': [],
       },
       'trainings': [],

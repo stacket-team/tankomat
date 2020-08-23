@@ -21,11 +21,11 @@ class _AddTrainingState extends State<AddTrainingView> {
   bool doSave = false;
   List<dynamic> elements = [];
   List<Map<String, TextEditingController>> controllers = [];
-  int lastID;
+  int movingCardID;
 
   _AddTrainingState(this.user) {
     timer = Timer.periodic(
-      Duration(seconds: 15),
+      Duration(seconds: 15), // TODO Run 15 seconds after stopped writing
       (_) async {
         if (doSave) {
           await user.ref.update(
@@ -73,8 +73,6 @@ class _AddTrainingState extends State<AddTrainingView> {
     String year = fixZeros(time.year);
     _saveText += isToday ? '$hour:$minute' : '$day.$month.$year $hour:$minute';
 
-    int _lastID = draft['lastID'];
-
     List<dynamic> _elements = draft['elements'];
 
     List<Map<String, TextEditingController>> _controllers = [];
@@ -94,11 +92,36 @@ class _AddTrainingState extends State<AddTrainingView> {
     });
 
     setState(() {
-      lastID = _lastID;
       elements = _elements;
       controllers = _controllers;
       saveText = _saveText;
       saveColor = Colors.green;
+    });
+  }
+
+  void onCardMoved(int from, int to) async {
+    final element = elements[from];
+    elements.removeAt(from);
+    if (from < to) to -= 1;
+    elements.insert(to, element);
+    await user.ref.update(
+      data: {
+        'draft.timestamp': firestore.FieldValue.serverTimestamp(),
+        'draft.elements': elements,
+      },
+    );
+    getDraft();
+  }
+
+  void showTargets(int cardID) {
+    setState(() {
+      movingCardID = cardID;
+    });
+  }
+
+  void hideTargets() {
+    setState(() {
+      movingCardID = null;
     });
   }
 
@@ -122,11 +145,14 @@ class _AddTrainingState extends State<AddTrainingView> {
         saveText: saveText,
         saveColor: saveColor,
         controllers: controllers,
+        onCardMoved: onCardMoved,
+        showTargets: showTargets,
+        hideTargets: hideTargets,
+        isCardMoving: movingCardID != null,
+        movingCardID: movingCardID,
         onAddFieldPress: () async {
-          int newID = lastID + 1;
           List newElements = elements;
           newElements.add({
-            'id': newID,
             'name': '',
             'description': '',
             'count': 5,
@@ -136,7 +162,6 @@ class _AddTrainingState extends State<AddTrainingView> {
             data: {
               'draft.timestamp': firestore.FieldValue.serverTimestamp(),
               'draft.elements': newElements,
-              'draft.lastID': newID,
             },
           );
           getDraft();
