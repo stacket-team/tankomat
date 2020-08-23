@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/components/Background.dart';
+import 'package:tankomat/views/AddTraining/components/ExerciseAdd.dart';
 import 'package:tankomat/views/AddTraining/components/ExerciseCard.dart';
 import 'package:tankomat/views/AddTraining/components/ExerciseTarget.dart';
 import 'package:tankomat/views/AddTraining/components/ExerciseTime.dart';
+import 'package:tankomat/views/AddTraining/components/SaveStatus.dart';
 import 'package:tankomat/views/AddTraining/components/TrainingTime.dart';
 
 class Body extends StatelessWidget {
@@ -34,18 +36,9 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Text(saveText),
-          Icon(
-            Icons.save,
-            color: saveColor,
-          ),
-        ],
-      ),
-    ];
+    List<Widget> children = [];
+
+    children.add(SaveStatus(saveText, saveColor));
 
     children.add(ExerciseTarget(
       0,
@@ -80,24 +73,7 @@ class Body extends StatelessWidget {
       ));
     }
 
-    children.add(Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        FlatButton(
-          onPressed: onAddFieldPress,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Icon(
-                Icons.add,
-                color: Colors.black,
-              ),
-              Text('Dodaj następne ćwiczenie'),
-            ],
-          ),
-        ),
-      ],
-    ));
+    children.add(ExerciseAdd(onAddFieldPress));
 
     children.add(TrainingTime(totalTime));
 
