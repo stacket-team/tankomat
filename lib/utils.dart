@@ -33,8 +33,29 @@ String secondsToHMS(int time) {
       : '${fixZeros(minutes)}:${fixZeros(seconds)}';
 }
 
-String fixZeros(int number) {
-  return number < 10 ? '0' + number.toString() : number.toString();
+String fixZeros(int number) =>
+    number < 10 ? '0' + number.toString() : number.toString();
+
+String fixNoun(
+  int number,
+  String base,
+  String first,
+  String second,
+  String third,
+) {
+  if (number == 0) {
+    return base + third;
+  } else if (number == 1) {
+    return base + first;
+  } else {
+    int unities = number % 10;
+    int tens = ((number - unities) / 10).floor() % 100;
+    if (tens != 1 && unities >= 2 && unities <= 4) {
+      return base + second;
+    } else {
+      return base + third;
+    }
+  }
 }
 
 void initializeFirebase() {

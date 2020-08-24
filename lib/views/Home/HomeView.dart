@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:tankomat/views/Dashboard/DashboardView.dart';
 import 'package:tankomat/views/Calendar/CalendarView.dart';
 import 'package:tankomat/views/Home/components/NavigationBar.dart';
-import 'package:tankomat/views/Map/MapView.dart';
+// import 'package:tankomat/views/Map/MapView.dart';
+import 'package:tankomat/views/Trainings/TrainingsView.dart';
 import 'package:tankomat/views/Profile/ProfileView.dart';
 import 'package:tankomat/constants.dart';
 import 'package:tankomat/utils.dart' show Auth, User;
@@ -12,28 +13,36 @@ import 'package:tankomat/utils.dart' show Auth, User;
 class HomeView extends StatefulWidget {
   final Auth auth;
   final User user;
+  final Map arguments;
 
-  HomeView(this.auth, this.user);
+  HomeView(this.auth, this.user, this.arguments);
 
   @override
-  _HomeState createState() => _HomeState(auth, user);
+  _HomeState createState() => _HomeState(auth, user, arguments);
 }
 
 class _HomeState extends State<HomeView> {
   final PageStorageBucket bucket = PageStorageBucket();
   final Auth auth;
   final User user;
+  final Map arguments;
 
   final List<Widget> tabs;
-  int currentTab = 0;
+  int currentTab;
 
-  _HomeState(this.auth, this.user)
+  _HomeState(this.auth, this.user, this.arguments)
       : tabs = [
           DashboardView(),
-          MapView(),
+          TrainingsView(user),
           CalendarView(),
           ProfileView(auth, user),
-        ];
+        ] {
+    if (arguments != null && arguments.containsKey('tab')) {
+      currentTab = arguments['tab'];
+    } else {
+      currentTab = 0;
+    }
+  }
 
   void handleTabChange(int tabIndex) {
     setState(() {

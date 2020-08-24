@@ -30,11 +30,11 @@ class NavigationBar extends StatelessWidget {
                   iconName: Icons.dashboard,
                 ),
                 NavigationButton(
-                  viewName: 'Mapa',
+                  viewName: 'Treningi',
                   currentTab: currentTab,
                   tabIndex: 1,
                   handleTabChange: handleTabChange,
-                  iconName: Icons.map,
+                  iconName: Icons.fitness_center,
                 ),
               ],
             ),

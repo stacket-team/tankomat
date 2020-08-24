@@ -131,7 +131,10 @@ class _AddTrainingState extends State<AddTrainingView> {
   }
 
   Function onFieldChange(
-          int id, String key, TextEditingController controller) =>
+    int id,
+    String key,
+    TextEditingController controller,
+  ) =>
       () {
         if (elements[id][key] != controller.text) {
           setState(() {
@@ -174,26 +177,13 @@ class _AddTrainingState extends State<AddTrainingView> {
         ]),
       },
     );
-    Navigator.of(context).pushNamed('/trainings');
+    Navigator.of(context).pushNamed(
+      '/',
+      arguments: {
+        'tab': 1,
+      },
+    );
   }
-
-//   void submitTraining() async {
-//     String name = nameController.text.trim();
-//     firestore.DocumentSnapshot snapshot = await user.ref.get();
-//     List trainings = snapshot.get('trainings');
-//     trainings.add(User.createTraining(
-//       name.isEmpty ? 'Nowy trening' : name,
-//       elements,
-//       totalTime,
-//     ));
-//     await user.ref.update(
-//       data: {
-//         'draft': User.createEmptyDraft(),
-//         'trainings': trainings,
-//       },
-//     );
-//     Navigator.of(context).pushNamed('/trainings');
-//   }
 
   @override
   Widget build(BuildContext context) {

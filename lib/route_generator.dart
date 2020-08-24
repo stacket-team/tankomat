@@ -43,7 +43,7 @@ class RouteGenerator {
 
         switch (settings.name) {
           case '/':
-            return HomeView(auth, user);
+            return HomeView(auth, user, settings.arguments);
           case '/login':
             return LoginView(auth);
           case '/register':
