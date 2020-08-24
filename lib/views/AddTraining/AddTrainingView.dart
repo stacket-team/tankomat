@@ -15,6 +15,7 @@ class AddTrainingView extends StatefulWidget {
 
 class _AddTrainingState extends State<AddTrainingView> {
   final User user;
+  final TextEditingController nameController = TextEditingController();
   Timer timer;
   Color saveColor = Colors.green;
   String saveText = '';
@@ -47,6 +48,7 @@ class _AddTrainingState extends State<AddTrainingView> {
   @override
   void dispose() {
     timer.cancel();
+    nameController.dispose();
     for (Map<String, TextEditingController> group in controllers) {
       for (TextEditingController controller in group.values) {
         controller.dispose();
@@ -146,12 +148,60 @@ class _AddTrainingState extends State<AddTrainingView> {
         }
       };
 
+  void addCard() async {
+    List newElements = elements;
+    newElements.add(User.createEmptyExercise());
+    await user.ref.update(
+      data: {
+        'draft.timestamp': firestore.FieldValue.serverTimestamp(),
+        'draft.elements': newElements,
+      },
+    );
+    getDraft();
+  }
+
+  void submitTraining() async {
+    String name = nameController.text.trim();
+    await user.ref.update(
+      data: {
+        'draft': User.createEmptyDraft(),
+        'trainings': firestore.FieldValue.arrayUnion([
+          User.createTraining(
+            name.isEmpty ? 'Nowy trening' : name,
+            elements,
+            totalTime,
+          ),
+        ]),
+      },
+    );
+    Navigator.of(context).pushNamed('/trainings');
+  }
+
+//   void submitTraining() async {
+//     String name = nameController.text.trim();
+//     firestore.DocumentSnapshot snapshot = await user.ref.get();
+//     List trainings = snapshot.get('trainings');
+//     trainings.add(User.createTraining(
+//       name.isEmpty ? 'Nowy trening' : name,
+//       elements,
+//       totalTime,
+//     ));
+//     await user.ref.update(
+//       data: {
+//         'draft': User.createEmptyDraft(),
+//         'trainings': trainings,
+//       },
+//     );
+//     Navigator.of(context).pushNamed('/trainings');
+//   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Body(
         saveText: saveText,
         saveColor: saveColor,
+        nameController: nameController,
         controllers: controllers,
         times: times,
         totalTime: totalTime,
@@ -160,23 +210,8 @@ class _AddTrainingState extends State<AddTrainingView> {
         hideTargets: hideTargets,
         isCardMoving: movingCardID != null,
         movingCardID: movingCardID,
-        onAddFieldPress: () async {
-          List newElements = elements;
-          newElements.add({
-            'name': '',
-            'description': '',
-            'count': 5,
-            'duration': '15 sek',
-            'time': 15,
-          });
-          await user.ref.update(
-            data: {
-              'draft.timestamp': firestore.FieldValue.serverTimestamp(),
-              'draft.elements': newElements,
-            },
-          );
-          getDraft();
-        },
+        onAddFieldPress: addCard,
+        onSubmitPress: submitTraining,
       ),
     );
   }

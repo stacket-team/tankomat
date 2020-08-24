@@ -237,18 +237,42 @@ class User extends Events {
 
   Future<firestore.DocumentSnapshot> getUserData() => ref.get();
 
+  static Map<String, dynamic> createEmptyDraft() => {
+        'timestamp': firestore.FieldValue.serverTimestamp(),
+        'name': '',
+        'elements': [],
+        'tags': [],
+      };
+
+  static Map<String, dynamic> createTraining(
+    String name,
+    List<dynamic> elements,
+    int time,
+  ) =>
+      {
+        'timestamp': DateTime.now(),
+        'name': name,
+        'elements': elements,
+        'tags': [], // TODO Add tags
+        'published': false,
+        'totalTime': time,
+      };
+
+  static Map<String, dynamic> createEmptyExercise() => {
+        'name': '',
+        'description': '',
+        'count': 5,
+        'duration': '15 sek',
+        'time': 15,
+      };
+
   static Future<void> createUserData(String uid, String name) {
     firestore.CollectionReference ref =
         firebase.firestore().collection('/users');
 
     Map<String, dynamic> userData = {
       'name': name,
-      'draft': {
-        'timestamp': firestore.FieldValue.serverTimestamp(),
-        'name': '',
-        'elements': [],
-        'tags': [],
-      },
+      'draft': createEmptyDraft(),
       'trainings': [],
       'schedules': [],
       'following': [],
