@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/constants.dart';
 
 class ForgotPassword extends StatelessWidget {
   final String text;
@@ -15,7 +16,7 @@ class ForgotPassword extends StatelessWidget {
         onPressed: onPress,
         child: Text(
           text,
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: TERTIARY_COLOR),
         ),
       ),
     );

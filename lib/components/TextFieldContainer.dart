@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-
 class TextFieldContainer extends StatelessWidget {
   final Widget child;
+  final Color backgroundColor;
+
   const TextFieldContainer({
     Key key,
+    this.backgroundColor,
     this.child,
   }) : super(key: key);
 
@@ -17,7 +18,7 @@ class TextFieldContainer extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       width: size.width * 0.8,
       decoration: BoxDecoration(
-        color: SECONDARY_COLOR,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(29),
       ),
       child: child,

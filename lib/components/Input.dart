@@ -8,6 +8,8 @@ class Input extends StatelessWidget {
   final TextEditingController controller;
   final bool isPassword;
   final bool isEmail;
+  final Color backgroundColor;
+
   const Input({
     Key key,
     this.placeholder,
@@ -16,11 +18,13 @@ class Input extends StatelessWidget {
     this.controller,
     this.isPassword,
     this.isEmail,
+    this.backgroundColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
+      backgroundColor: backgroundColor,
       child: TextFormField(
         obscureText: isPassword,
         keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tankomat/components/Form.dart';
 import 'package:tankomat/components/Background.dart';
 import 'package:tankomat/components/SocialIcon.dart';
+import 'package:tankomat/constants.dart';
 import 'package:tankomat/views/Login/components/DontHaveAnAccount.dart';
 import 'package:tankomat/views/Login/components/ForgotPassword.dart';
 import 'package:tankomat/components/Button.dart';
@@ -29,21 +30,30 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Background(
+      backgroundColor: PRIMARY_COLOR,
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             AuthForm(
               children: [
-                SizedBox(
-                  height: 150.0,
-                  child: Image.asset(
-                    'assets/logo.png',
-                    fit: BoxFit.contain,
+                // SizedBox(
+                //   height: 150.0,
+                //   child: Image.asset(
+                //     'assets/logo.png',
+                //     fit: BoxFit.contain,
+                //   ),
+                // ),
+                Text(
+                  'APKA',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32.0,
                   ),
                 ),
                 SizedBox(height: 20.0),
                 Input(
+                  backgroundColor: SECONDARY_COLOR,
                   isPassword: false,
                   isEmail: true,
                   placeholder: 'E-mail',
@@ -51,13 +61,16 @@ class Body extends StatelessWidget {
                   icon: Icons.email,
                 ),
                 Input(
-                    isPassword: true,
-                    isEmail: false,
-                    placeholder: 'Hasło',
-                    controller: passwordController,
-                    icon: Icons.security),
+                  backgroundColor: SECONDARY_COLOR,
+                  isPassword: true,
+                  isEmail: false,
+                  placeholder: 'Hasło',
+                  controller: passwordController,
+                  icon: Icons.security,
+                ),
                 Button(
-                  text: 'Zaloguj się',
+                  backgroundColor: SECONDARY_COLOR,
+                  text: 'ZALOGUJ SIĘ',
                   press: onPress,
                 ),
                 ForgotPassword(

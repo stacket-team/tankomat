@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/constants.dart';
 import 'package:tankomat/views/Home/components/NavigationButton.dart';
 
 class NavigationBar extends StatelessWidget {
@@ -14,6 +15,7 @@ class NavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      color: PRIMARY_COLOR,
       shape: CircularNotchedRectangle(),
       child: Container(
         height: 60.0,

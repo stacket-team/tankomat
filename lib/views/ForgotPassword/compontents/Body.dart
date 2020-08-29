@@ -3,6 +3,7 @@ import 'package:tankomat/components/Background.dart';
 import 'package:tankomat/components/Button.dart';
 import 'package:tankomat/components/Form.dart';
 import 'package:tankomat/components/Input.dart';
+import 'package:tankomat/constants.dart';
 
 class Body extends StatelessWidget {
   final TextEditingController emailController;
@@ -17,6 +18,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Background(
+      backgroundColor: Color(0xFFFF934F),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -24,6 +26,7 @@ class Body extends StatelessWidget {
             AuthForm(
               children: <Widget>[
                 Input(
+                  backgroundColor: PRIMARY_COLOR,
                   isPassword: false,
                   isEmail: true,
                   placeholder: 'E-mail',
@@ -31,17 +34,18 @@ class Body extends StatelessWidget {
                   icon: Icons.email,
                 ),
                 Button(
+                  backgroundColor: PRIMARY_COLOR,
                   text: 'Zresetuj hasło',
                   press: onSendPress,
                 )
               ],
             ),
-            Button(
-              text: 'Powrót',
-              press: () {
-                Navigator.of(context).pop();
-              },
-            ),
+            // Button(
+            //   text: 'Powrót',
+            //   press: () {
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
           ],
         ),
       ),

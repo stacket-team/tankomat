@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/constants.dart';
 
 class NavigationButton extends StatelessWidget {
   final String viewName;
@@ -18,7 +19,7 @@ class NavigationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color = currentTab == tabIndex ? Colors.blue : Colors.grey;
+    Color color = currentTab == tabIndex ? TAN : GREY;
     return MaterialButton(
       minWidth: 40.0,
       onPressed: () {

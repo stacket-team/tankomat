@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/constants.dart';
 import 'package:tankomat/components/Form.dart';
 import 'package:tankomat/components/SocialIcon.dart';
 import 'package:tankomat/components/Background.dart';
@@ -27,6 +28,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Background(
+      backgroundColor: PRIMARY_COLOR,
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -34,6 +36,7 @@ class Body extends StatelessWidget {
             AuthForm(
               children: [
                 Input(
+                  backgroundColor: SECONDARY_COLOR,
                   isPassword: false,
                   isEmail: false,
                   placeholder: 'Imię',
@@ -41,6 +44,7 @@ class Body extends StatelessWidget {
                   icon: Icons.person,
                 ),
                 Input(
+                  backgroundColor: SECONDARY_COLOR,
                   isPassword: false,
                   isEmail: true,
                   placeholder: 'E-mail',
@@ -48,6 +52,7 @@ class Body extends StatelessWidget {
                   icon: Icons.email,
                 ),
                 Input(
+                  backgroundColor: SECONDARY_COLOR,
                   isPassword: true,
                   isEmail: false,
                   placeholder: 'Hasło',
@@ -55,6 +60,7 @@ class Body extends StatelessWidget {
                   icon: Icons.security,
                 ),
                 Button(
+                  backgroundColor: SECONDARY_COLOR,
                   text: 'Zarejestruj się',
                   press: onPress,
                 ),
