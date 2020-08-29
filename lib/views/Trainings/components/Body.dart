@@ -7,11 +7,15 @@ class Body extends StatelessWidget {
   final List trainings;
   final Function onAddTrainingPress;
   final Function onLongCardPress;
+  final Function onTrainPress;
+  final Function onSharePress;
 
   Body({
     this.trainings,
     this.onAddTrainingPress,
     this.onLongCardPress,
+    this.onTrainPress,
+    this.onSharePress,
   });
 
   @override
@@ -30,6 +34,8 @@ class Body extends StatelessWidget {
         training['totalTime'],
         (training['elements'] as List).length,
         onLongCardPress,
+        onTrainPress,
+        onSharePress,
       ));
     }
 

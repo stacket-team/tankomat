@@ -36,6 +36,25 @@ class _TrainingsState extends State<TrainingsView> {
     Navigator.of(context).pushNamed('/add');
   }
 
+  void redirectToTraining(int id, String name) => () {
+        Navigator.of(context).pushNamed(
+          '/training',
+          arguments: {
+            'id': id,
+            'name': name,
+          },
+        );
+      };
+
+  void redirectToShare(int id) => () {
+        Navigator.of(context).pushNamed(
+          '/share',
+          arguments: {
+            'id': id,
+          },
+        );
+      };
+
   void showCardMenu(int id) => () async {
         Function fn = await showMenu<Function>(
           context: context,
@@ -71,10 +90,16 @@ class _TrainingsState extends State<TrainingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Container(),
+        title: Text('Treningi'),
+      ),
       body: Body(
         trainings: trainings,
         onAddTrainingPress: redirectToAddTraining,
         onLongCardPress: showCardMenu,
+        onTrainPress: redirectToTraining,
+        onSharePress: redirectToShare,
       ),
     );
   }

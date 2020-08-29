@@ -79,6 +79,8 @@ class TrainingCard extends StatelessWidget {
   final int totalTime;
   final int exercisesCount;
   final Function onLongPress;
+  final Function onTrainPress;
+  final Function onSharePress;
 
   TrainingCard(
     this.id,
@@ -86,6 +88,8 @@ class TrainingCard extends StatelessWidget {
     this.totalTime,
     this.exercisesCount,
     this.onLongPress,
+    this.onTrainPress,
+    this.onSharePress,
   );
 
   @override
@@ -108,7 +112,7 @@ class TrainingCard extends StatelessWidget {
                   'Rozpocznij',
                   Icons.arrow_forward_ios,
                   true,
-                  () {}, // TODO Redirect to training mode
+                  onTrainPress(id, name),
                 ),
               ],
             ),
@@ -126,7 +130,7 @@ class TrainingCard extends StatelessWidget {
                   'Opublikuj',
                   Icons.public,
                   false,
-                  () {}, // TODO Redirect to publishing
+                  onSharePress(id),
                 ),
               ],
             ),
