@@ -18,6 +18,7 @@ class TrainingView extends StatefulWidget {
 class _TrainingState extends State<TrainingView> {
   final User user;
   final Map arguments;
+  final List<Map<String, dynamic>> metrics = [];
 
   int id;
   String name;
@@ -50,7 +51,7 @@ class _TrainingState extends State<TrainingView> {
   @override
   void dispose() {
     if (timer != null) timer.cancel();
-    if (pauseTimer != null) timer.cancel();
+    if (pauseTimer != null) pauseTimer.cancel();
     super.dispose();
   }
 
@@ -78,12 +79,22 @@ class _TrainingState extends State<TrainingView> {
       },
     );
 
+    if (pauseTimer != null) {
+      pauseTimer.cancel();
+      metrics.add(User.createMetricForPause(
+        rest,
+        pauseTime + 1,
+        exerciseID - 1,
+      ));
+    }
+
     setState(() {
       started = true;
       time = 0;
       timestamp = _timestamp;
       startTimestamp = _startTimestamp;
       timer = _timer;
+      pauseTime = 0;
     });
   }
 
@@ -91,20 +102,28 @@ class _TrainingState extends State<TrainingView> {
     timer.cancel();
     int _exerciseID = exerciseID + 1;
 
+    metrics.add(User.createMetricForExercise(
+      elements[exerciseID]['name'],
+      int.parse(elements[exerciseID]['count']),
+      elements[exerciseID]['time'],
+      time,
+    ));
+
     if (_exerciseID < elements.length) {
       DateTime _pauseTimestamp = DateTime.now();
       Timer _pauseTimer = Timer.periodic(
         Duration(seconds: 1),
         (_) {
           int _pauseTime = DateTime.now().difference(pauseTimestamp).inSeconds;
-          if (_pauseTime >= rest) {
+          if (_pauseTime >= rest && runAfterPause) {
             pauseTimer.cancel();
-            if (runAfterPause) startExercise();
+            startExercise();
+          } else {
+            setState(() {
+              paused = _pauseTime < rest;
+              pauseTime = _pauseTime;
+            });
           }
-          setState(() {
-            paused = _pauseTime < rest;
-            pauseTime = _pauseTime;
-          });
         },
       );
       setState(() {
@@ -121,7 +140,7 @@ class _TrainingState extends State<TrainingView> {
           'id': id,
           'start': startTimestamp,
           'end': DateTime.now(),
-          // TODO Add metrics
+          'metrics': metrics,
         },
       );
     }

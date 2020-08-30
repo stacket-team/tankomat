@@ -292,6 +292,32 @@ class User extends Events {
         'time': 15,
       };
 
+  static Map<String, dynamic> createMetricForExercise(
+    String name,
+    int count,
+    int desiredTime,
+    int time,
+  ) =>
+      {
+        'type': 'exercise',
+        'name': name,
+        'count': count,
+        'desiredTime': desiredTime,
+        'time': time,
+      };
+
+  static Map<String, dynamic> createMetricForPause(
+    int desiredTime,
+    int time,
+    int afterExerciseID,
+  ) =>
+      {
+        'type': 'pause',
+        'desiredTime': desiredTime,
+        'time': time,
+        'after': afterExerciseID,
+      };
+
   static Future<void> createUserData(String uid, String name) {
     firestore.CollectionReference ref =
         firebase.firestore().collection('/users');
