@@ -9,6 +9,10 @@ class StartExercise extends StatelessWidget {
   final int count;
   final int time;
   final Function onStartPress;
+  final bool paused;
+  final int leftPauseTime;
+  final bool runAfterPause;
+  final Function toggleRunAfterPause;
 
   StartExercise(
     this.name,
@@ -16,6 +20,10 @@ class StartExercise extends StatelessWidget {
     this.count,
     this.time,
     this.onStartPress,
+    this.paused,
+    this.leftPauseTime,
+    this.runAfterPause,
+    this.toggleRunAfterPause,
   );
 
   @override
@@ -40,6 +48,29 @@ class StartExercise extends StatelessWidget {
             ],
           ),
           SmallText(description),
+          paused
+              ? Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.alarm),
+                        SmallText(secondsToHMS(leftPauseTime)),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Checkbox(
+                          value: runAfterPause,
+                          onChanged: toggleRunAfterPause,
+                        ),
+                        SmallText('Uruchom po przerwie'),
+                      ],
+                    ),
+                  ],
+                )
+              : Container(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

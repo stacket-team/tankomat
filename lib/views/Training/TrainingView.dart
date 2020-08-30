@@ -23,19 +23,26 @@ class _TrainingState extends State<TrainingView> {
   String name;
   List elements;
   int totalTime;
-  bool isLoaded = false;
+  int rest;
 
   int exerciseID = 0;
   bool started = false;
-  int time;
+  int time = 0;
   DateTime timestamp;
   DateTime startTimestamp;
   Timer timer;
+
+  bool paused = false;
+  DateTime pauseTimestamp;
+  int pauseTime = 0;
+  Timer pauseTimer;
+  bool runAfterPause;
 
   _TrainingState(this.user, this.arguments) {
     if (arguments != null && arguments.containsKey('id')) {
       id = arguments['id'];
       name = arguments.containsKey('name') ? arguments['name'] : '';
+      runAfterPause = user.runAfterPause;
       getTraining();
     }
   }
@@ -43,6 +50,7 @@ class _TrainingState extends State<TrainingView> {
   @override
   void dispose() {
     if (timer != null) timer.cancel();
+    if (pauseTimer != null) timer.cancel();
     super.dispose();
   }
 
@@ -53,7 +61,7 @@ class _TrainingState extends State<TrainingView> {
       name = training['name'];
       elements = training['elements'];
       totalTime = training['totalTime'];
-      isLoaded = true;
+      rest = training['rest'];
     });
   }
 
@@ -84,10 +92,27 @@ class _TrainingState extends State<TrainingView> {
     int _exerciseID = exerciseID + 1;
 
     if (_exerciseID < elements.length) {
+      DateTime _pauseTimestamp = DateTime.now();
+      Timer _pauseTimer = Timer.periodic(
+        Duration(seconds: 1),
+        (_) {
+          int _pauseTime = DateTime.now().difference(pauseTimestamp).inSeconds;
+          if (_pauseTime >= rest) {
+            pauseTimer.cancel();
+            if (runAfterPause) startExercise();
+          }
+          setState(() {
+            paused = _pauseTime < rest;
+            pauseTime = _pauseTime;
+          });
+        },
+      );
       setState(() {
         started = false;
         exerciseID = _exerciseID;
-        // TODO Add pause display
+        paused = true;
+        pauseTimestamp = _pauseTimestamp;
+        pauseTimer = _pauseTimer;
       });
     } else {
       Navigator.of(context).pushNamed(
@@ -100,6 +125,17 @@ class _TrainingState extends State<TrainingView> {
         },
       );
     }
+  }
+
+  void toggleRunAfterPause(bool value) {
+    user.ref.update(
+      data: {
+        'runAfterPause': value,
+      },
+    );
+    setState(() {
+      runAfterPause = value;
+    });
   }
 
   @override
@@ -118,9 +154,12 @@ class _TrainingState extends State<TrainingView> {
         title: Text(name),
       ),
       body: Body(
-        isLoaded: isLoaded,
         started: started,
-        current: elements != null ? elements[exerciseID] : {},
+        paused: paused,
+        leftPauseTime: rest != null ? rest - pauseTime : pauseTime,
+        runAfterPause: runAfterPause,
+        toggleRunAfterPause: toggleRunAfterPause,
+        current: elements != null ? elements[exerciseID] : null,
         onStartPress: startExercise,
         onEndPress: endExercise,
         time: time,

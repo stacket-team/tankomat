@@ -173,6 +173,7 @@ class _AddTrainingState extends State<AddTrainingView> {
             name.isEmpty ? 'Nowy trening' : name,
             elements,
             totalTime,
+            0, // TODO Add propper input for this value
           ),
         ]),
       },
