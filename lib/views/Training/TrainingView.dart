@@ -138,6 +138,7 @@ class _TrainingState extends State<TrainingView> {
         '/finished',
         arguments: {
           'id': id,
+          'name': name,
           'start': startTimestamp,
           'end': DateTime.now(),
           'metrics': metrics,
@@ -169,9 +170,14 @@ class _TrainingState extends State<TrainingView> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(name),
-      ),
+      appBar: timer == null
+          ? AppBar(
+              title: Text(name),
+            )
+          : AppBar(
+              title: Text(name),
+              leading: Container(),
+            ),
       body: Body(
         started: started,
         paused: paused,

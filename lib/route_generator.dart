@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as firebase;
 import 'package:tankomat/utils.dart';
 import 'package:tankomat/views/AddTraining/AddTrainingView.dart';
+import 'package:tankomat/views/Finished/FinishedView.dart';
 import 'package:tankomat/views/Training/TrainingView.dart';
 import 'views/ForgotPassword/ForgotPasswordView.dart';
 import 'views/Loading/LoadingView.dart';
@@ -61,6 +62,8 @@ class RouteGenerator {
             return AddTrainingView(user);
           case '/training':
             return TrainingView(user, settings.arguments);
+          case '/finished':
+            return FinishedView(user, settings.arguments);
           default:
             return errorRoute();
         }

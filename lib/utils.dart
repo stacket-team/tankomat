@@ -318,6 +318,21 @@ class User extends Events {
         'after': afterExerciseID,
       };
 
+  static Map<String, dynamic> createPieceOfHistory(
+    int trainingID,
+    String trainingName,
+    DateTime start,
+    DateTime end,
+    List<Map<String, dynamic>> metrics,
+  ) =>
+      {
+        'trainingID': trainingID, // TODO change trainings to collection
+        'trainingName': trainingName,
+        'start': start,
+        'end': end,
+        'metrics': metrics,
+      };
+
   static Future<void> createUserData(String uid, String name) {
     firestore.CollectionReference ref =
         firebase.firestore().collection('/users');
