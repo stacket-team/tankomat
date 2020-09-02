@@ -19,7 +19,7 @@ class NavigationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color = currentTab == tabIndex ? TAN : GREY;
+    Color color = currentTab == tabIndex ? Colors.red : Colors.black;
     return MaterialButton(
       minWidth: 40.0,
       onPressed: () {

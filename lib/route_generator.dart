@@ -4,6 +4,7 @@ import 'package:tankomat/utils.dart';
 import 'package:tankomat/views/AddTraining/AddTrainingView.dart';
 import 'package:tankomat/views/Finished/FinishedView.dart';
 import 'package:tankomat/views/Training/TrainingView.dart';
+import 'package:tankomat/views/forgot_password/forgot_password.dart';
 import 'views/ForgotPassword/ForgotPasswordView.dart';
 import 'views/Loading/LoadingView.dart';
 import 'views/VerifyEmail/VerifyEmailView.dart';
@@ -55,7 +56,8 @@ class RouteGenerator {
           case '/linkCredentials':
             return LinkCredentialsView(auth, settings.arguments);
           case '/forgotPassword':
-            return ForgotPasswordView(auth, settings.arguments);
+            // return ForgotPasswordView(auth, settings.arguments);
+            return ForgotPassword();
           case '/loading':
             return LoadingView();
           case '/add':

@@ -10,7 +10,7 @@ class StartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      color: TAN,
+      color: Colors.black,
       onPressed: onPress,
       child: Text(text),
     );
@@ -26,7 +26,7 @@ class EndButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      color: GREY,
+      color: Colors.black,
       onPressed: onPress,
       child: Text(text),
     );

@@ -16,7 +16,7 @@ class DontHaveAnAccount extends StatelessWidget {
         onPressed: onPress,
         child: Text(
           text,
-          style: TextStyle(color: TERTIARY_COLOR),
+          style: TextStyle(color: Colors.black),
         ),
       ),
     );

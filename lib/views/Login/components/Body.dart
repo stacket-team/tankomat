@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tankomat/components/Form.dart';
 import 'package:tankomat/components/Background.dart';
-import 'package:tankomat/components/SocialIcon.dart';
-import 'package:tankomat/constants.dart';
-import 'package:tankomat/views/Login/components/DontHaveAnAccount.dart';
-import 'package:tankomat/views/Login/components/ForgotPassword.dart';
-import 'package:tankomat/components/Button.dart';
-import 'package:tankomat/components/Input.dart';
-import 'package:tankomat/views/Register/components/SocialDivider.dart';
+import 'package:tankomat/components/social_card.dart';
+import 'package:tankomat/views/Login/components/sign_in_form.dart';
+
+import 'no_account_text.dart';
 
 class Body extends StatelessWidget {
   final TextEditingController emailController;
@@ -30,76 +26,63 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Background(
-      backgroundColor: PRIMARY_COLOR,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            AuthForm(
-              children: [
-                // SizedBox(
-                //   height: 150.0,
-                //   child: Image.asset(
-                //     'assets/logo.png',
-                //     fit: BoxFit.contain,
-                //   ),
-                // ),
-                Text(
-                  'APKA',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 32.0,
+      backgroundColor: Colors.white,
+      child: SafeArea(
+        child: SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 20.0,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.04,
                   ),
-                ),
-                SizedBox(height: 20.0),
-                Input(
-                  backgroundColor: SECONDARY_COLOR,
-                  isPassword: false,
-                  isEmail: true,
-                  placeholder: 'E-mail',
-                  controller: emailController,
-                  icon: Icons.email,
-                ),
-                Input(
-                  backgroundColor: SECONDARY_COLOR,
-                  isPassword: true,
-                  isEmail: false,
-                  placeholder: 'Hasło',
-                  controller: passwordController,
-                  icon: Icons.security,
-                ),
-                Button(
-                  backgroundColor: SECONDARY_COLOR,
-                  text: 'ZALOGUJ SIĘ',
-                  press: onPress,
-                ),
-                ForgotPassword(
-                  text: 'Zapomniałeś hasła?',
-                  onPress: onForgotPasswordPress,
-                ),
-                DontHaveAnAccount(
-                  text: 'Nie masz konta? Zarejestruj się tutaj!',
-                  onPress: () {
-                    Navigator.of(context).pushNamed('/register');
-                  },
-                ),
-              ],
+                  Text(
+                    'Witaj z powrotem!',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 28.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Zaloguj się za pomocą e-mail \n lub kontunuj za pomocą mediów społecznościowych',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xFF8B8B8B),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.08,
+                  ),
+                  SignInForm(),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.08,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SocialCard(
+                        icon: 'assets/facebook.png',
+                        onPress: () {},
+                      ),
+                      SocialCard(
+                        icon: 'assets/google.png',
+                        onPress: () {},
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  NoAccountText(),
+                ],
+              ),
             ),
-            SocialDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SocialIcon(
-                  iconSrc: 'google.png',
-                  press: onGooglePress,
-                ),
-                SocialIcon(
-                  iconSrc: 'facebook.png',
-                  press: onFacebookPress,
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );
