@@ -19,7 +19,7 @@ class SocialIcon extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 10),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          border: Border.all(width: 1, color: TERTIARY_COLOR),
+          border: Border.all(width: 1, color: Colors.black),
           shape: BoxShape.circle,
         ),
         child: Image(

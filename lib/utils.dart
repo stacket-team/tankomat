@@ -206,6 +206,7 @@ class User extends Events {
   firestore.DocumentReference ref;
   firestore.DocumentSnapshot snapshot;
   String name;
+  bool runAfterPause;
   String email;
   String photoURL;
   List<String> providers;
@@ -242,6 +243,7 @@ class User extends Events {
     // TODO Auto reload data on snapshot listener
     snapshot = await ref.get();
     name = snapshot.get('name');
+    runAfterPause = snapshot.get('runAfterPause');
   }
 
   Future<void> reloadAuth() async {
@@ -263,12 +265,14 @@ class User extends Events {
         'name': '',
         'elements': [],
         'tags': [],
+        'rest': 0,
       };
 
   static Map<String, dynamic> createTraining(
     String name,
     List<dynamic> elements,
     int time,
+    int rest,
   ) =>
       {
         'timestamp': DateTime.now(),
@@ -277,6 +281,7 @@ class User extends Events {
         'tags': [], // TODO Add tags
         'published': false,
         'totalTime': time,
+        'rest': rest,
       };
 
   static Map<String, dynamic> createEmptyExercise() => {
@@ -285,6 +290,47 @@ class User extends Events {
         'count': 5,
         'duration': '15 sek',
         'time': 15,
+      };
+
+  static Map<String, dynamic> createMetricForExercise(
+    String name,
+    int count,
+    int desiredTime,
+    int time,
+  ) =>
+      {
+        'type': 'exercise',
+        'name': name,
+        'count': count,
+        'desiredTime': desiredTime,
+        'time': time,
+      };
+
+  static Map<String, dynamic> createMetricForPause(
+    int desiredTime,
+    int time,
+    int afterExerciseID,
+  ) =>
+      {
+        'type': 'pause',
+        'desiredTime': desiredTime,
+        'time': time,
+        'after': afterExerciseID,
+      };
+
+  static Map<String, dynamic> createPieceOfHistory(
+    int trainingID,
+    String trainingName,
+    DateTime start,
+    DateTime end,
+    List<Map<String, dynamic>> metrics,
+  ) =>
+      {
+        'trainingID': trainingID, // TODO change trainings to collection
+        'trainingName': trainingName,
+        'start': start,
+        'end': end,
+        'metrics': metrics,
       };
 
   static Future<void> createUserData(String uid, String name) {
@@ -296,11 +342,13 @@ class User extends Events {
       'draft': createEmptyDraft(),
       'trainings': [],
       'schedules': [],
+      'history': [],
       'following': [],
       'followers': [],
       'friends': [],
       'friendsRequests': [],
       'receiveFriendsRequests': true,
+      'runAfterPause': true,
     };
 
     return ref.doc(uid).set(userData);

@@ -17,7 +17,7 @@ class SocialDivider extends StatelessWidget {
             child: Text(
               'LUB',
               style: TextStyle(
-                color: TERTIARY_COLOR,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -31,7 +31,7 @@ class SocialDivider extends StatelessWidget {
   Expanded buildDivider() {
     return Expanded(
       child: Divider(
-        color: TERTIARY_COLOR,
+        color: Colors.black,
         thickness: 1.75,
       ),
     );
