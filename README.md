@@ -1,5 +1,5 @@
 <h1 align="center">
-  Tankomat
+  <img alt="Dopine" src="https://i.imgur.com/wqwPK8D.png">
 <h1>
 
 <p align="center">
@@ -12,28 +12,31 @@
 </p>
 
 <h3 align="center">
-  Flutter PWA for keeping track of your gas usage
+  Flutter PWA for keeping track of your workouts and more!
 </h3>
 
-Tankomat provides access to a gas prices map and is a safe space to store information about your fuel usage. It will show you your average fuel consumption arranged into a graph.
+Dopine provides access to the wide community of sportsmen who share their workout routines with others. Schedule and invite your friends to your own training sessions. Watch your progress and add new exercises as you go. 
 
 ### Features
 
-* Keep track of your gas usage
-* Check gas prices in your neighbourhood
+* Create your own workouts
+* Keep track of your gym progress
+* Invite your friends to exercise meetups 
 
-Made for drivers
+Made for people who are active in sports
 
 * Open or download this app and create a free account
-* Benefit from the broad community of drivers
-* Contribute yourself by using the app
+* Benefit from the broad community of sportsmen
+* Contribute yourself by publishing your workouts
 
 ## Usage
 
-This is a Progressive Web Application so you can download it from [here](https://tankomat.netlify.app/) using just your browser
+This is a Progressive Web Application so you can download it from [here](https://dopine.netlify.app/) using just your browser
 
 You can use Google or Facebook to sign in (or just an email and password)
 
-After creating an account every time you visit a gas station add it to your history
+After creating an account checkout published workout routines
 
-Thanks to other users you can check the map and see gas prices in your city
+Thanks to other users you can use theirs trainings
+
+You can create your own workouts and invite friends to scheduled meetups
