@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/constants.dart';
 
 class ExerciseCard extends StatelessWidget {
   final TextEditingController name;
@@ -6,8 +7,9 @@ class ExerciseCard extends StatelessWidget {
   final TextEditingController count;
   final TextEditingController duration;
   final int id;
-  final Function showTargets;
-  final Function hideTargets;
+  final Function toggleCardSelection;
+  final bool isCardSelected;
+  final List<int> selectedCardsID;
 
   ExerciseCard(
     this.id,
@@ -15,82 +17,68 @@ class ExerciseCard extends StatelessWidget {
     this.description,
     this.count,
     this.duration,
-    this.showTargets,
-    this.hideTargets,
+    this.toggleCardSelection,
+    this.isCardSelected,
+    this.selectedCardsID,
   );
 
   @override
   Widget build(BuildContext context) {
-    return LongPressDraggable<int>(
+    return GestureDetector(
+      onLongPress: toggleCardSelection(id),
       child: Container(
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(30),
         decoration: BoxDecoration(
-          color: Colors.orange[300],
+          color: PRIMARY_COLOR,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: name,
-              decoration: InputDecoration(
-                hintText: 'Ćwiczenie',
+        child: isCardSelected
+            ? Row(
+                children: <Widget>[
+                  selectedCardsID.contains(id)
+                      ? Icon(
+                          Icons.check_circle,
+                          color: PRIMARY_LIGHT_COLOR,
+                        )
+                      : Container(),
+                  Text(
+                    name.text == '' ? 'Ćwiczenie' : name.text,
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextField(
+                    controller: name,
+                    decoration: InputDecoration(
+                      hintText: 'Ćwiczenie',
+                    ),
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.multiline,
+                    controller: description,
+                    decoration: InputDecoration(
+                      hintText: 'Opis',
+                    ),
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: count,
+                    decoration: InputDecoration(
+                      hintText: 'Ilość',
+                    ),
+                  ),
+                  TextField(
+                    controller: duration,
+                    decoration: InputDecoration(
+                      hintText: 'Czas',
+                    ),
+                  ),
+                ],
               ),
-            ),
-            TextField(
-              keyboardType: TextInputType.multiline,
-              controller: description,
-              decoration: InputDecoration(
-                hintText: 'Opis',
-              ),
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: count,
-              decoration: InputDecoration(
-                hintText: 'Ilość',
-              ),
-            ),
-            TextField(
-              controller: duration,
-              decoration: InputDecoration(
-                hintText: 'Czas',
-              ),
-            ),
-          ],
-        ),
       ),
-      childWhenDragging: Container(),
-      feedback: Container(
-        padding: EdgeInsets.all(30),
-        decoration: BoxDecoration(
-          color: Colors.orange[300],
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.orange.withOpacity(0.3),
-              spreadRadius: 3,
-              blurRadius: 5,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Text(
-          name.text.isEmpty ? 'Ćwiczenie' : name.text,
-          textAlign: TextAlign.left,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.normal,
-            fontSize: 16,
-            decoration: TextDecoration.none,
-          ),
-        ),
-      ),
-      dragAnchor: DragAnchor.pointer,
-      data: id,
-      onDragStarted: () => showTargets(id),
-      onDragEnd: (details) => hideTargets(),
     );
   }
 }

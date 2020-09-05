@@ -24,7 +24,7 @@ class _AddTrainingState extends State<AddTrainingView> {
   List<int> times = [];
   int totalTime = 0;
   List<Map<String, TextEditingController>> controllers = [];
-  int movingCardID;
+  List<int> selectedCards = [];
 
   _AddTrainingState(this.user) {
     timer = Timer.periodic(
@@ -101,34 +101,38 @@ class _AddTrainingState extends State<AddTrainingView> {
       totalTime = _totalTime;
       saveText = _saveText;
       saveColor = Colors.green;
+      selectedCards = [];
     });
   }
 
-  void onCardMoved(int from, int to) async {
-    final element = elements[from];
-    elements.removeAt(from);
-    if (from < to) to -= 1;
-    elements.insert(to, element);
-    await user.ref.update(
-      data: {
-        'draft.timestamp': firestore.FieldValue.serverTimestamp(),
-        'draft.elements': elements,
-      },
-    );
-    getDraft();
-  }
+  Function onCardMoved(int to) => () async {
+        if (selectedCards.length == 1) {
+          int from = selectedCards.first;
+          final element = elements[from];
+          elements.removeAt(from);
+          if (from < to) to -= 1;
+          elements.insert(to, element);
+          await user.ref.update(
+            data: {
+              'draft.timestamp': firestore.FieldValue.serverTimestamp(),
+              'draft.elements': elements,
+            },
+          );
+          getDraft();
+        }
+      };
 
-  void showTargets(int cardID) {
-    setState(() {
-      movingCardID = cardID;
-    });
-  }
-
-  void hideTargets() {
-    setState(() {
-      movingCardID = null;
-    });
-  }
+  Function toggleCardSelection(int cardID) => () {
+        List<int> _selectedCards = selectedCards;
+        if (_selectedCards.contains(cardID)) {
+          _selectedCards.remove(cardID);
+        } else {
+          _selectedCards.add(cardID);
+        }
+        setState(() {
+          selectedCards = _selectedCards;
+        });
+      };
 
   Function onFieldChange(
     int id,
@@ -197,10 +201,11 @@ class _AddTrainingState extends State<AddTrainingView> {
         times: times,
         totalTime: totalTime,
         onCardMoved: onCardMoved,
-        showTargets: showTargets,
-        hideTargets: hideTargets,
-        isCardMoving: movingCardID != null,
-        movingCardID: movingCardID,
+        toggleCardSelection: toggleCardSelection,
+        isCardMoving: selectedCards.length == 1,
+        selectedCardID: selectedCards.length == 1 ? selectedCards.first : null,
+        isCardSelected: selectedCards.length > 0,
+        selectedCardsID: selectedCards,
         onAddFieldPress: addCard,
         onSubmitPress: submitTraining,
       ),

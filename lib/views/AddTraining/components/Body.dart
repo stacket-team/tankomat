@@ -18,10 +18,11 @@ class Body extends StatelessWidget {
   final int totalTime;
   final Function onCardMoved;
   final Function onAddFieldPress;
-  final Function showTargets;
-  final Function hideTargets;
+  final Function toggleCardSelection;
   final bool isCardMoving;
-  final int movingCardID;
+  final int selectedCardID;
+  final bool isCardSelected;
+  final List<int> selectedCardsID;
   final Function onSubmitPress;
 
   Body({
@@ -33,10 +34,11 @@ class Body extends StatelessWidget {
     this.totalTime,
     this.onCardMoved,
     this.onAddFieldPress,
-    this.showTargets,
-    this.hideTargets,
+    this.toggleCardSelection,
     this.isCardMoving,
-    this.movingCardID,
+    this.isCardSelected,
+    this.selectedCardID,
+    this.selectedCardsID,
     this.onSubmitPress,
   });
 
@@ -52,7 +54,7 @@ class Body extends StatelessWidget {
       0,
       onCardMoved,
       isCardMoving,
-      movingCardID,
+      selectedCardID,
     ));
 
     for (MapEntry<int, Map<String, TextEditingController>> entry
@@ -65,8 +67,9 @@ class Body extends StatelessWidget {
         controllersGroup['description'],
         controllersGroup['count'],
         controllersGroup['duration'],
-        showTargets,
-        hideTargets,
+        toggleCardSelection,
+        isCardSelected,
+        selectedCardsID,
       ));
 
       if (times.length > entry.key) {
@@ -77,7 +80,7 @@ class Body extends StatelessWidget {
         entry.key + 1,
         onCardMoved,
         isCardMoving,
-        movingCardID,
+        selectedCardID,
       ));
     }
 
