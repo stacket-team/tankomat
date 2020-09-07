@@ -8,12 +8,13 @@ import 'package:tankomat/views/AddTraining/components/SaveStatus.dart';
 import 'package:tankomat/views/AddTraining/components/TrainingName.dart';
 import 'package:tankomat/views/AddTraining/components/TrainingSubmit.dart';
 import 'package:tankomat/views/AddTraining/components/TrainingTime.dart';
+import 'package:tankomat/views/AddTraining/components/Group.dart';
 
 class Body extends StatelessWidget {
   final Color saveColor;
   final String saveText;
   final TextEditingController nameController;
-  final List<Map<String, TextEditingController>> controllers;
+  final List<Map<String, dynamic>> controllers;
   final List<int> times;
   final int totalTime;
   final Function onCardMoved;
@@ -42,6 +43,52 @@ class Body extends StatelessWidget {
     this.onSubmitPress,
   });
 
+  Map buildExercises(List<Map<String, dynamic>> controllers, int offset) {
+    List<Widget> children = [];
+    int key = offset;
+    controllers.forEach((element) {
+      if (element.containsKey('elements')) {
+        Map res = buildExercises(element['elements'], key);
+        key += res['offset'];
+        children.add(Group(
+          element['count'],
+          res['elements'],
+        ));
+      } else {
+        int globalKey = key + offset;
+        key += 1;
+
+        // print(globalKey);
+
+        children.add(ExerciseCard(
+          globalKey,
+          element['name'],
+          element['description'],
+          element['count'],
+          element['duration'],
+          toggleCardSelection,
+          isCardSelected,
+          selectedCardsID,
+        ));
+
+        if (times.length > globalKey) {
+          children.add(ExerciseTime(times[globalKey], isCardMoving));
+        }
+
+        children.add(ExerciseTarget(
+          globalKey + 1,
+          onCardMoved,
+          isCardMoving,
+          selectedCardID,
+        ));
+      }
+    });
+    return {
+      'elements': children,
+      'offset': key,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [];
@@ -57,32 +104,7 @@ class Body extends StatelessWidget {
       selectedCardID,
     ));
 
-    for (MapEntry<int, Map<String, TextEditingController>> entry
-        in controllers.asMap().entries) {
-      Map<String, TextEditingController> controllersGroup = entry.value;
-
-      children.add(ExerciseCard(
-        entry.key,
-        controllersGroup['name'],
-        controllersGroup['description'],
-        controllersGroup['count'],
-        controllersGroup['duration'],
-        toggleCardSelection,
-        isCardSelected,
-        selectedCardsID,
-      ));
-
-      if (times.length > entry.key) {
-        children.add(ExerciseTime(times[entry.key], isCardMoving));
-      }
-
-      children.add(ExerciseTarget(
-        entry.key + 1,
-        onCardMoved,
-        isCardMoving,
-        selectedCardID,
-      ));
-    }
+    children.addAll(buildExercises(controllers, 0)['elements']);
 
     children.add(ExerciseAdd(onAddFieldPress));
 

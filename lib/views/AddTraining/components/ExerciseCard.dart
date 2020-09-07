@@ -43,7 +43,7 @@ class ExerciseCard extends StatelessWidget {
                         )
                       : Container(),
                   Text(
-                    name.text == '' ? 'Ćwiczenie' : name.text,
+                    name.text.isEmpty ? 'Ćwiczenie' : name.text,
                   ),
                 ],
               )
@@ -56,25 +56,38 @@ class ExerciseCard extends StatelessWidget {
                       hintText: 'Ćwiczenie',
                     ),
                   ),
-                  TextField(
-                    keyboardType: TextInputType.multiline,
-                    controller: description,
-                    decoration: InputDecoration(
-                      hintText: 'Opis',
-                    ),
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    controller: count,
-                    decoration: InputDecoration(
-                      hintText: 'Ilość',
-                    ),
-                  ),
-                  TextField(
-                    controller: duration,
-                    decoration: InputDecoration(
-                      hintText: 'Czas',
-                    ),
+                  Row(
+                    children: <Widget>[
+                      Flexible(
+                        child: TextField(
+                          keyboardType: TextInputType.multiline,
+                          controller: description,
+                          decoration: InputDecoration(
+                            hintText: 'Opis',
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 150,
+                        child: Column(
+                          children: <Widget>[
+                            TextField(
+                              keyboardType: TextInputType.number,
+                              controller: count,
+                              decoration: InputDecoration(
+                                hintText: 'Ilość',
+                              ),
+                            ),
+                            TextField(
+                              controller: duration,
+                              decoration: InputDecoration(
+                                hintText: 'Czas',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

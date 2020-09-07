@@ -287,9 +287,14 @@ class User extends Events {
   static Map<String, dynamic> createEmptyExercise() => {
         'name': '',
         'description': '',
-        'count': 5,
-        'duration': '15 sek',
-        'time': 15,
+        'count': 10,
+        'duration': '30s',
+        'time': 30,
+      };
+
+  static Map<String, dynamic> createGroup(List elements) => {
+        'count': 1,
+        'elements': elements,
       };
 
   static Map<String, dynamic> createMetricForExercise(

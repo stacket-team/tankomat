@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tankomat/views/AddTraining/components/Body.dart';
 import 'package:tankomat/utils.dart' show User, fixZeros, parseTime;
 import 'package:firebase/firestore.dart' as firestore;
+import 'package:tankomat/views/AddTraining/components/GroupFAB.dart';
 
 class AddTrainingView extends StatefulWidget {
   final User user;
@@ -23,7 +24,7 @@ class _AddTrainingState extends State<AddTrainingView> {
   List<dynamic> elements = [];
   List<int> times = [];
   int totalTime = 0;
-  List<Map<String, TextEditingController>> controllers = [];
+  List<Map<String, dynamic>> controllers = [];
   List<int> selectedCards = [];
 
   _AddTrainingState(this.user) {
@@ -57,6 +58,24 @@ class _AddTrainingState extends State<AddTrainingView> {
     super.dispose();
   }
 
+  List<Map<String, dynamic>> createControllers(elements) {
+    List<Map<String, dynamic>> controllers = [];
+    (elements as List).asMap().forEach((id, element) {
+      Map<String, dynamic> group = {};
+      (element as Map).forEach((key, value) {
+        if (key == 'elements') {
+          group[key] = createControllers(value);
+        } else if (key != 'time') {
+          group[key] = TextEditingController(
+              text: value is num ? value.toString() : value);
+          group[key].addListener(onFieldChange(id, key, group[key]));
+        }
+      });
+      controllers.add(group);
+    });
+    return controllers;
+  }
+
   void getDraft() async {
     firestore.DocumentSnapshot snapshot = await user.ref.get();
     final draft = snapshot.get('draft');
@@ -75,23 +94,13 @@ class _AddTrainingState extends State<AddTrainingView> {
 
     List<dynamic> _elements = draft['elements'];
 
-    List<Map<String, TextEditingController>> _controllers = [];
-    _elements.asMap().forEach((id, element) {
-      Map<String, TextEditingController> map = {
-        'name': TextEditingController(text: element['name']),
-        'description': TextEditingController(text: element['description']),
-        'count': TextEditingController(text: element['count'].toString()),
-        'duration': TextEditingController(text: element['duration']),
-      };
+    List<Map<String, dynamic>> _controllers = createControllers(_elements);
 
-      map.forEach((key, controller) {
-        controller.addListener(onFieldChange(id, key, controller));
-      });
-
-      _controllers.add(map);
-    });
-
-    List<int> _times = _elements.map((e) => e['time'] as int).toList();
+    List<int> _times = [
+      1,
+      1,
+      1
+    ]; //_elements.map((e) => e['time'] as int).toList();
     int _totalTime = _times.reduce((acc, element) => acc + element);
 
     setState(() {
@@ -190,9 +199,34 @@ class _AddTrainingState extends State<AddTrainingView> {
     );
   }
 
+  void addGroup() async {
+    List newElements = elements;
+
+    List groupElements = [];
+    selectedCards.sort((a, b) => b.compareTo(a));
+    int insertAt = selectedCards.last;
+    for (int id in selectedCards) {
+      groupElements.add(newElements.removeAt(id));
+    }
+
+    newElements.insert(insertAt, User.createGroup(groupElements));
+
+    await user.ref.update(
+      data: {
+        'draft.timestamp': firestore.FieldValue.serverTimestamp(),
+        'draft.elements': newElements,
+      },
+    );
+    getDraft();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: GroupFloatingActionButton(
+        addGroup,
+        selectedCards.length > 1,
+      ),
       body: Body(
         saveText: saveText,
         saveColor: saveColor,

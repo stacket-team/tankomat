@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/constants.dart';
 
 class TrainingSubmit extends StatelessWidget {
   final Function onPress;
@@ -9,7 +10,7 @@ class TrainingSubmit extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlatButton(
       onPressed: onPress,
-      color: Colors.orange[300],
+      color: PRIMARY_COLOR,
       padding: EdgeInsets.all(8),
       child: Text('Zapisz trening'),
     );

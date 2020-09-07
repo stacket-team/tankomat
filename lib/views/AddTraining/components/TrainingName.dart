@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tankomat/constants.dart';
 
 class TrainingName extends StatelessWidget {
   final TextEditingController controller;
@@ -11,7 +12,7 @@ class TrainingName extends StatelessWidget {
       margin: EdgeInsets.all(20),
       padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Colors.orange[300],
+        color: PRIMARY_COLOR,
         borderRadius: BorderRadius.circular(8),
       ),
       child: TextField(
