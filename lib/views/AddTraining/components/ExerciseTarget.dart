@@ -3,10 +3,10 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:tankomat/constants.dart';
 
 class ExerciseTarget extends StatelessWidget {
-  final int id;
+  final List<int> id;
   final Function onMoved;
   final bool isCardMoving;
-  final int movingCardID;
+  final List<int> movingCardID;
 
   ExerciseTarget(
     this.id,
@@ -17,7 +17,7 @@ class ExerciseTarget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (isCardMoving && (id > movingCardID + 1 || id < movingCardID))
+    return false // (isCardMoving && (id > movingCardID + 1 || id < movingCardID))
         ? FlatButton(
             onPressed: onMoved(id),
             child: DottedBorder(

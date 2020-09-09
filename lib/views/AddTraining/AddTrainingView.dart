@@ -25,7 +25,7 @@ class _AddTrainingState extends State<AddTrainingView> {
   List<int> times = [];
   int totalTime = 0;
   List<Map<String, dynamic>> controllers = [];
-  List<int> selectedCards = [];
+  List<List<int>> selectedCards = [];
 
   _AddTrainingState(this.user) {
     timer = Timer.periodic(
@@ -58,17 +58,19 @@ class _AddTrainingState extends State<AddTrainingView> {
     super.dispose();
   }
 
-  List<Map<String, dynamic>> createControllers(elements) {
+  List<Map<String, dynamic>> createControllers(elements, List<int> offset) {
     List<Map<String, dynamic>> controllers = [];
     (elements as List).asMap().forEach((id, element) {
       Map<String, dynamic> group = {};
+      List<int> chain = [id];
+      chain.insertAll(0, offset);
       (element as Map).forEach((key, value) {
         if (key == 'elements') {
-          group[key] = createControllers(value);
+          group[key] = createControllers(value, chain);
         } else if (key != 'time') {
           group[key] = TextEditingController(
               text: value is num ? value.toString() : value);
-          group[key].addListener(onFieldChange(id, key, group[key]));
+          group[key].addListener(onFieldChange(chain, key, group[key]));
         }
       });
       controllers.add(group);
@@ -94,7 +96,7 @@ class _AddTrainingState extends State<AddTrainingView> {
 
     List<dynamic> _elements = draft['elements'];
 
-    List<Map<String, dynamic>> _controllers = createControllers(_elements);
+    List<Map<String, dynamic>> _controllers = createControllers(_elements, []);
 
     List<int> _times = [
       1,
@@ -114,27 +116,31 @@ class _AddTrainingState extends State<AddTrainingView> {
     });
   }
 
-  Function onCardMoved(int to) => () async {
-        if (selectedCards.length == 1) {
-          int from = selectedCards.first;
-          final element = elements[from];
-          elements.removeAt(from);
-          if (from < to) to -= 1;
-          elements.insert(to, element);
-          await user.ref.update(
-            data: {
-              'draft.timestamp': firestore.FieldValue.serverTimestamp(),
-              'draft.elements': elements,
-            },
-          );
-          getDraft();
-        }
+  Function onCardMoved(List<int> to) => () async {
+        // TODO implement moving
+        // if (selectedCards.length == 1) {
+        //   int from = selectedCards.first;
+        //   final element = elements[from];
+        //   elements.removeAt(from);
+        //   if (from < to) to -= 1;
+        //   elements.insert(to, element);
+        //   await user.ref.update(
+        //     data: {
+        //       'draft.timestamp': firestore.FieldValue.serverTimestamp(),
+        //       'draft.elements': elements,
+        //     },
+        //   );
+        //   getDraft();
+        // }
       };
 
-  Function toggleCardSelection(int cardID) => () {
-        List<int> _selectedCards = selectedCards;
-        if (_selectedCards.contains(cardID)) {
-          _selectedCards.remove(cardID);
+  Function toggleCardSelection(List<int> cardID) => () {
+        List<List<int>> _selectedCards = selectedCards;
+        if (_selectedCards
+            .map((chain) => chain.join(','))
+            .contains(cardID.join(','))) {
+          _selectedCards
+              .removeWhere((chain) => chain.join(',') == cardID.join(','));
         } else {
           _selectedCards.add(cardID);
         }
@@ -144,18 +150,23 @@ class _AddTrainingState extends State<AddTrainingView> {
       };
 
   Function onFieldChange(
-    int id,
+    List<int> chain,
     String key,
     TextEditingController controller,
   ) =>
       () {
-        if (elements[id][key] != controller.text) {
+        Map element = elements[chain.first];
+        chain.skip(1).forEach((id) {
+          element = element['elements'][id];
+        });
+        if (element[key] != controller.text) {
           setState(() {
-            elements[id][key] = controller.text;
+            element[key] = controller.text;
             if (key == 'duration') {
-              elements[id]['time'] = parseTime(controller.text);
-              times = elements.map((e) => e['time'] as int).toList();
-              totalTime = times.reduce((acc, element) => acc + element);
+              element['time'] = parseTime(controller.text);
+              // TODO recalc time
+              // times = elements.map((e) => e['time'] as int).toList();
+              // totalTime = times.reduce((acc, time) => acc + time);
             }
             saveText = '';
             saveColor = Colors.grey;
@@ -201,15 +212,78 @@ class _AddTrainingState extends State<AddTrainingView> {
 
   void addGroup() async {
     List newElements = elements;
-
     List groupElements = [];
-    selectedCards.sort((a, b) => b.compareTo(a));
-    int insertAt = selectedCards.last;
-    for (int id in selectedCards) {
-      groupElements.add(newElements.removeAt(id));
+    selectedCards.sort((a, b) => b.join(',').compareTo(a.join(',')));
+
+    // determine where to insert the new group
+    List<int> insertAt;
+    int minDepth = double.maxFinite as int;
+    bool same = true;
+    for (List<int> chain in selectedCards) {
+      if (chain.length < minDepth) {
+        minDepth = chain.length;
+        insertAt = chain;
+      }
+      if (chain.length != minDepth) {
+        same = false;
+      }
+    }
+    if (same) {
+      insertAt = selectedCards.last;
     }
 
-    newElements.insert(insertAt, User.createGroup(groupElements));
+    // delete old elements
+    List<Map<String, List>> editedGroups = [];
+    for (List<int> chain in selectedCards) {
+      Map selectedElement = newElements[chain.first];
+      List temp;
+      List parent = newElements;
+      chain.skip(1).forEach((id) {
+        temp = parent;
+        parent = selectedElement['elements'];
+        selectedElement = parent[id];
+      });
+      if (chain.length > 1) {
+        editedGroups.add({
+          'chain': chain,
+          'group': parent,
+          'parent': temp,
+        });
+      }
+      groupElements.add(parent.removeAt(chain.last));
+    }
+
+    // insert new group
+    Map selectedElement = newElements.asMap().containsKey(insertAt.first)
+        ? newElements[insertAt.first]
+        : null;
+    List parent = newElements;
+    insertAt.skip(1).forEach((id) {
+      parent = selectedElement['elements'];
+      if (id < parent.length) selectedElement = parent[id];
+    });
+    parent.insert(insertAt.last, User.createGroup(groupElements));
+
+    // if chain before is now empty, delete it
+    Map<int, List<int>> removedPositions = {};
+    for (Map<String, List> groupData in editedGroups) {
+      if (groupData['group'].isEmpty) {
+        int removedPositionID = groupData['chain'].length - 2;
+        int removedPosition = groupData['chain'][removedPositionID];
+        bool remove = false;
+        if (removedPositions.containsKey(removedPositionID)) {
+          remove =
+              removedPositions[removedPositionID].contains(removedPosition) ==
+                  false;
+        } else {
+          removedPositions[removedPositionID] = [removedPosition];
+          remove = true;
+        }
+        if (remove) {
+          groupData['parent'].removeAt(removedPosition);
+        }
+      }
+    }
 
     await user.ref.update(
       data: {

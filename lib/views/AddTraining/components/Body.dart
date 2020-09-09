@@ -21,9 +21,9 @@ class Body extends StatelessWidget {
   final Function onAddFieldPress;
   final Function toggleCardSelection;
   final bool isCardMoving;
-  final int selectedCardID;
+  final List<int> selectedCardID;
   final bool isCardSelected;
-  final List<int> selectedCardsID;
+  final List<List<int>> selectedCardsID;
   final Function onSubmitPress;
 
   Body({
@@ -43,25 +43,22 @@ class Body extends StatelessWidget {
     this.onSubmitPress,
   });
 
-  Map buildExercises(List<Map<String, dynamic>> controllers, int offset) {
+  List<Widget> buildExercises(
+    List<Map<String, dynamic>> controllers,
+    List<int> offset,
+  ) {
     List<Widget> children = [];
-    int key = offset;
-    controllers.forEach((element) {
+    controllers.asMap().forEach((key, element) {
+      List<int> chain = [key];
+      chain.insertAll(0, offset);
       if (element.containsKey('elements')) {
-        Map res = buildExercises(element['elements'], key);
-        key += res['offset'];
         children.add(Group(
           element['count'],
-          res['elements'],
+          buildExercises(element['elements'], chain),
         ));
       } else {
-        int globalKey = key + offset;
-        key += 1;
-
-        // print(globalKey);
-
         children.add(ExerciseCard(
-          globalKey,
+          chain,
           element['name'],
           element['description'],
           element['count'],
@@ -71,22 +68,22 @@ class Body extends StatelessWidget {
           selectedCardsID,
         ));
 
-        if (times.length > globalKey) {
-          children.add(ExerciseTime(times[globalKey], isCardMoving));
-        }
+        // TODO Add time display
+        // if (times.length > globalKey) {
+        //   children.add(ExerciseTime(times[globalKey], isCardMoving));
+        // }
 
+        List<int> nextChain = [key + 1];
+        nextChain.insertAll(0, offset);
         children.add(ExerciseTarget(
-          globalKey + 1,
+          nextChain,
           onCardMoved,
           isCardMoving,
           selectedCardID,
         ));
       }
     });
-    return {
-      'elements': children,
-      'offset': key,
-    };
+    return children;
   }
 
   @override
@@ -98,13 +95,13 @@ class Body extends StatelessWidget {
     children.add(TrainingName(nameController));
 
     children.add(ExerciseTarget(
-      0,
+      [0],
       onCardMoved,
       isCardMoving,
       selectedCardID,
     ));
 
-    children.addAll(buildExercises(controllers, 0)['elements']);
+    children.addAll(buildExercises(controllers, []));
 
     children.add(ExerciseAdd(onAddFieldPress));
 

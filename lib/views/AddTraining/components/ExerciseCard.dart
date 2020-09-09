@@ -6,10 +6,10 @@ class ExerciseCard extends StatelessWidget {
   final TextEditingController description;
   final TextEditingController count;
   final TextEditingController duration;
-  final int id;
+  final List<int> id;
   final Function toggleCardSelection;
   final bool isCardSelected;
-  final List<int> selectedCardsID;
+  final List<List<int>> selectedCardsID;
 
   ExerciseCard(
     this.id,
@@ -36,7 +36,9 @@ class ExerciseCard extends StatelessWidget {
         child: isCardSelected
             ? Row(
                 children: <Widget>[
-                  selectedCardsID.contains(id)
+                  selectedCardsID
+                          .map((chain) => chain.join(','))
+                          .contains(id.join(','))
                       ? Icon(
                           Icons.check_circle,
                           color: PRIMARY_LIGHT_COLOR,
