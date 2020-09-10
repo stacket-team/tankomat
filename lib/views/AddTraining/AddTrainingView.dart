@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tankomat/views/AddTraining/components/Body.dart';
 import 'package:tankomat/utils.dart' show User, fixZeros, parseTime;
 import 'package:firebase/firestore.dart' as firestore;
-import 'package:tankomat/views/AddTraining/components/GroupFAB.dart';
+import 'package:tankomat/views/AddTraining/components/FloatingMenu.dart';
 
 class AddTrainingView extends StatefulWidget {
   final User user;
@@ -294,12 +294,68 @@ class _AddTrainingState extends State<AddTrainingView> {
     getDraft();
   }
 
+  void removeSelected() async {
+    List newElements = elements;
+    selectedCards.sort((a, b) => b.join(',').compareTo(a.join(',')));
+
+    // delete selected elements
+    List<Map<String, List>> editedGroups = [];
+    for (List<int> chain in selectedCards) {
+      Map selectedElement = newElements[chain.first];
+      List temp;
+      List parent = newElements;
+      chain.skip(1).forEach((id) {
+        temp = parent;
+        parent = selectedElement['elements'];
+        selectedElement = parent[id];
+      });
+      if (chain.length > 1) {
+        editedGroups.add({
+          'chain': chain,
+          'group': parent,
+          'parent': temp,
+        });
+      }
+      parent.removeAt(chain.last);
+    }
+
+    // if chain before is now empty, delete it
+    Map<int, List<int>> removedPositions = {};
+    for (Map<String, List> groupData in editedGroups) {
+      if (groupData['group'].isEmpty) {
+        int removedPositionID = groupData['chain'].length - 2;
+        int removedPosition = groupData['chain'][removedPositionID];
+        bool remove = false;
+        if (removedPositions.containsKey(removedPositionID)) {
+          remove =
+              removedPositions[removedPositionID].contains(removedPosition) ==
+                  false;
+        } else {
+          removedPositions[removedPositionID] = [removedPosition];
+          remove = true;
+        }
+        if (remove) {
+          groupData['parent'].removeAt(removedPosition);
+        }
+      }
+    }
+
+    await user.ref.update(
+      data: {
+        'draft.timestamp': firestore.FieldValue.serverTimestamp(),
+        'draft.elements': newElements,
+      },
+    );
+    getDraft();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: GroupFloatingActionButton(
+      floatingActionButton: FloatingMenu(
+        selectedCards.length,
         addGroup,
-        selectedCards.length > 1,
+        removeSelected,
       ),
       body: Body(
         saveText: saveText,
