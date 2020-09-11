@@ -117,21 +117,71 @@ class _AddTrainingState extends State<AddTrainingView> {
   }
 
   Function onCardMoved(List<int> to) => () async {
-        // TODO implement moving
-        // if (selectedCards.length == 1) {
-        //   int from = selectedCards.first;
-        //   final element = elements[from];
-        //   elements.removeAt(from);
-        //   if (from < to) to -= 1;
-        //   elements.insert(to, element);
-        //   await user.ref.update(
-        //     data: {
-        //       'draft.timestamp': firestore.FieldValue.serverTimestamp(),
-        //       'draft.elements': elements,
-        //     },
-        //   );
-        //   getDraft();
-        // }
+        // TODO Fix the out of range error
+        List newElements = elements;
+        List removedElements = [];
+        selectedCards.sort((a, b) => b.join(',').compareTo(a.join(',')));
+
+        // delete old elements
+        List<Map<String, List>> editedGroups = [];
+        for (List<int> chain in selectedCards) {
+          Map selectedElement = newElements[chain.first];
+          List temp;
+          List parent = newElements;
+          chain.skip(1).forEach((id) {
+            temp = parent;
+            parent = selectedElement['elements'];
+            selectedElement = parent[id];
+          });
+          if (chain.length > 1) {
+            editedGroups.add({
+              'chain': chain,
+              'group': parent,
+              'parent': temp,
+            });
+          }
+          removedElements.add(parent.removeAt(chain.last));
+        }
+
+        // insert new group
+        Map selectedElement = newElements.asMap().containsKey(to.first)
+            ? newElements[to.first]
+            : null;
+        List parent = newElements;
+        to.skip(1).forEach((id) {
+          parent = selectedElement['elements'];
+          if (id < parent.length) selectedElement = parent[id];
+        });
+        parent.insertAll(to.last, removedElements);
+
+        // if chain before is now empty, delete it
+        Map<int, List<int>> removedPositions = {};
+        for (Map<String, List> groupData in editedGroups) {
+          if (groupData['group'].isEmpty) {
+            int removedPositionID = groupData['chain'].length - 2;
+            int removedPosition = groupData['chain'][removedPositionID];
+            bool remove = false;
+            if (removedPositions.containsKey(removedPositionID)) {
+              remove = removedPositions[removedPositionID]
+                      .contains(removedPosition) ==
+                  false;
+            } else {
+              removedPositions[removedPositionID] = [removedPosition];
+              remove = true;
+            }
+            if (remove) {
+              groupData['parent'].removeAt(removedPosition);
+            }
+          }
+        }
+
+        await user.ref.update(
+          data: {
+            'draft.timestamp': firestore.FieldValue.serverTimestamp(),
+            'draft.elements': newElements,
+          },
+        );
+        getDraft();
       };
 
   Function toggleCardSelection(List<int> cardID) => () {

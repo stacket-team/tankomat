@@ -52,9 +52,27 @@ class Body extends StatelessWidget {
       List<int> chain = [key];
       chain.insertAll(0, offset);
       if (element.containsKey('elements')) {
+        List<int> firstChain = [0];
+        firstChain.insertAll(0, chain);
+
         children.add(Group(
           element['count'],
+          ExerciseTarget(
+            firstChain,
+            onCardMoved,
+            isCardMoving,
+            selectedCardID,
+          ),
           buildExercises(element['elements'], chain),
+        ));
+
+        List<int> nextChain = [key + 1];
+        nextChain.insertAll(0, offset);
+        children.add(ExerciseTarget(
+          nextChain,
+          onCardMoved,
+          isCardMoving,
+          selectedCardID,
         ));
       } else {
         children.add(ExerciseCard(

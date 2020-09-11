@@ -15,9 +15,18 @@ class ExerciseTarget extends StatelessWidget {
     this.movingCardID,
   );
 
+  bool isDisplayable() {
+    String sid = id.join(',');
+    String mid0 = movingCardID.join(',');
+    movingCardID.last += 1;
+    String mid1 = movingCardID.join(',');
+    movingCardID.last -= 1;
+    return !(id.length == movingCardID.length && (sid == mid0 || sid == mid1));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return false // (isCardMoving && (id > movingCardID + 1 || id < movingCardID))
+    return isCardMoving && isDisplayable()
         ? FlatButton(
             onPressed: onMoved(id),
             child: DottedBorder(
