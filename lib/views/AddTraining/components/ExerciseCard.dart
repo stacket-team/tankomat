@@ -24,6 +24,7 @@ class ExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO Switch GestureDetector to Checkbox and Extendalbe Cards
     return GestureDetector(
       onLongPress: toggleCardSelection(id),
       child: Container(

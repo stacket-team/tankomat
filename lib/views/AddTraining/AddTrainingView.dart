@@ -118,6 +118,7 @@ class _AddTrainingState extends State<AddTrainingView> {
 
   Function onCardMoved(List<int> to) => () async {
         // TODO Fix the out of range error
+        // TODO Unable to move card if the card is first (in all or in group)
         List newElements = elements;
         List removedElements = [];
         selectedCards.sort((a, b) => b.join(',').compareTo(a.join(',')));
@@ -184,15 +185,53 @@ class _AddTrainingState extends State<AddTrainingView> {
         getDraft();
       };
 
+  List<List<int>> getChainsOf(List elements, List<int> chain) {
+    List<List<int>> chains = [];
+    for (MapEntry<int, dynamic> entry in elements.asMap().entries) {
+      Map element = entry.value as Map;
+      List<int> elementChain = [entry.key];
+      elementChain.insertAll(0, chain);
+      chains.add(elementChain);
+      if (element.containsKey('elements')) {
+        chains.addAll(getChainsOf(element['elements'], elementChain));
+      }
+    }
+    return chains;
+  }
+
   Function toggleCardSelection(List<int> cardID) => () {
         List<List<int>> _selectedCards = selectedCards;
-        if (_selectedCards
-            .map((chain) => chain.join(','))
-            .contains(cardID.join(','))) {
+        Iterable<String> mappedCards =
+            _selectedCards.map((chain) => chain.join(','));
+        if (mappedCards.contains(cardID.join(','))) {
           _selectedCards
               .removeWhere((chain) => chain.join(',') == cardID.join(','));
         } else {
-          _selectedCards.add(cardID);
+          bool isParentNotSelected = true;
+          List<int> parentChain = [];
+          List parent = elements;
+          int lastID = cardID.first;
+          Map element = parent[lastID];
+          cardID.skip(1).forEach((id) {
+            parentChain.add(lastID);
+            parent = element['elements'];
+            if (isParentNotSelected &&
+                mappedCards.contains(parentChain.join(','))) {
+              isParentNotSelected = false;
+            }
+            lastID = id;
+            element = parent[lastID];
+          });
+
+          if (isParentNotSelected) {
+            if (element.containsKey('elements')) {
+              Iterable<String> chains = getChainsOf(element['elements'], cardID)
+                  .map((chain) => chain.join(','));
+              _selectedCards
+                  .removeWhere((chain) => chains.contains(chain.join(',')));
+            }
+            _selectedCards.add(cardID);
+          }
         }
         setState(() {
           selectedCards = _selectedCards;
@@ -345,6 +384,8 @@ class _AddTrainingState extends State<AddTrainingView> {
   }
 
   void removeSelected() async {
+    // TODO When removing a group ask if user wants to keep it contents
+
     List newElements = elements;
     selectedCards.sort((a, b) => b.join(',').compareTo(a.join(',')));
 

@@ -56,6 +56,7 @@ class Body extends StatelessWidget {
         firstChain.insertAll(0, chain);
 
         children.add(Group(
+          chain,
           element['count'],
           ExerciseTarget(
             firstChain,
@@ -64,6 +65,7 @@ class Body extends StatelessWidget {
             selectedCardID,
           ),
           buildExercises(element['elements'], chain),
+          toggleCardSelection,
         ));
 
         List<int> nextChain = [key + 1];

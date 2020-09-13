@@ -16,6 +16,7 @@ class ExerciseTarget extends StatelessWidget {
   );
 
   bool isDisplayable() {
+    // TODO Add support for groups
     String sid = id.join(',');
     String mid0 = movingCardID.join(',');
     movingCardID.last += 1;
