@@ -64,7 +64,6 @@ flutter:
   assets:
     - facebook.png
     - google.png
-    - loading.gif
     - logo.png
     - password.png
     - avatar.png
