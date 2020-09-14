@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tankomat/constants.dart';
+import 'package:tankomat/utils.dart' show fixNoun;
 
 class Group extends StatelessWidget {
   final List<int> chain;
@@ -7,6 +8,8 @@ class Group extends StatelessWidget {
   final Widget firstTarget;
   final List<Widget> elements;
   final Function toggleCardSelection;
+  final List<List<int>> selectedCardsID;
+  final bool isCardSelected;
 
   Group(
     this.chain,
@@ -14,6 +17,8 @@ class Group extends StatelessWidget {
     this.firstTarget,
     this.elements,
     this.toggleCardSelection,
+    this.selectedCardsID,
+    this.isCardSelected,
   );
 
   @override
@@ -21,7 +26,11 @@ class Group extends StatelessWidget {
     final List<Widget> children = [firstTarget];
     children.addAll(elements);
 
-    // TODO Display info that group is selected
+    int parsed = int.tryParse(countController.text);
+    String noun = parsed != null
+        ? fixNoun(parsed, 'powtórze', 'nie', 'nia', 'ń')
+        : parsed;
+
     return Container(
       margin: EdgeInsets.fromLTRB(20, 20, 0, 20),
       child: CustomPaint(
@@ -31,19 +40,27 @@ class Group extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                SizedBox(
-                  width: 200,
-                  child: TextField(
-                    controller: countController,
-                    decoration: InputDecoration(
-                      hintText: 'Ilość potwórzeń',
-                    ),
-                  ),
+                Checkbox(
+                  value: selectedCardsID
+                      .map((selectedChain) => selectedChain.join(','))
+                      .contains(chain.join(',')),
+                  onChanged: toggleCardSelection(chain),
                 ),
-                FlatButton(
-                  onPressed: toggleCardSelection(chain),
-                  child: Icon(Icons.select_all),
-                ),
+                isCardSelected
+                    ? Text(
+                        (countController.text.isEmpty || parsed == null)
+                            ? 'Grupa ćwiczeń'
+                            : '${countController.text} $noun',
+                      )
+                    : SizedBox(
+                        width: 200,
+                        child: TextField(
+                          controller: countController,
+                          decoration: InputDecoration(
+                            hintText: 'Ilość potwórzeń',
+                          ),
+                        ),
+                      ),
               ],
             ),
             Container(
@@ -62,7 +79,7 @@ class Group extends StatelessWidget {
 class GroupBackground extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    double w = 230;
+    double w = 180;
     double big = 60, full = big / 2, half = full / 2;
 
     Path path = Path();

@@ -24,76 +24,75 @@ class ExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO Switch GestureDetector to Checkbox and Extendalbe Cards
-    return GestureDetector(
-      onLongPress: toggleCardSelection(id),
-      child: Container(
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.all(30),
-        decoration: BoxDecoration(
-          color: PRIMARY_COLOR,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: isCardSelected
-            ? Row(
-                children: <Widget>[
-                  selectedCardsID
-                          .map((chain) => chain.join(','))
-                          .contains(id.join(','))
-                      ? Icon(
-                          Icons.check_circle,
-                          color: PRIMARY_LIGHT_COLOR,
-                        )
-                      : Container(),
-                  Text(
-                    name.text.isEmpty ? 'Ćwiczenie' : name.text,
-                  ),
-                ],
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  TextField(
-                    controller: name,
-                    decoration: InputDecoration(
-                      hintText: 'Ćwiczenie',
-                    ),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Flexible(
-                        child: TextField(
-                          keyboardType: TextInputType.multiline,
-                          controller: description,
-                          decoration: InputDecoration(
-                            hintText: 'Opis',
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 150,
-                        child: Column(
-                          children: <Widget>[
-                            TextField(
-                              keyboardType: TextInputType.number,
-                              controller: count,
-                              decoration: InputDecoration(
-                                hintText: 'Ilość',
-                              ),
-                            ),
-                            TextField(
-                              controller: duration,
-                              decoration: InputDecoration(
-                                hintText: 'Czas',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+    // TODO Extendalbe Cards
+    return Container(
+      margin: EdgeInsets.all(20),
+      padding: EdgeInsets.all(30),
+      decoration: BoxDecoration(
+        color: PRIMARY_COLOR,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Checkbox(
+                value: selectedCardsID
+                    .map((chain) => chain.join(','))
+                    .contains(id.join(',')),
+                onChanged: toggleCardSelection(id),
               ),
+              isCardSelected
+                  ? Text(
+                      name.text.isEmpty ? 'Ćwiczenie' : name.text,
+                    )
+                  : Flexible(
+                      child: TextField(
+                        controller: name,
+                        decoration: InputDecoration(
+                          hintText: 'Ćwiczenie',
+                        ),
+                      ),
+                    ),
+            ],
+          ),
+          isCardSelected
+              ? Container()
+              : Row(
+                  children: <Widget>[
+                    Flexible(
+                      child: TextField(
+                        keyboardType: TextInputType.multiline,
+                        controller: description,
+                        decoration: InputDecoration(
+                          hintText: 'Opis',
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 150,
+                      child: Column(
+                        children: <Widget>[
+                          TextField(
+                            keyboardType: TextInputType.number,
+                            controller: count,
+                            decoration: InputDecoration(
+                              hintText: 'Ilość',
+                            ),
+                          ),
+                          TextField(
+                            controller: duration,
+                            decoration: InputDecoration(
+                              hintText: 'Czas',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+        ],
       ),
     );
   }

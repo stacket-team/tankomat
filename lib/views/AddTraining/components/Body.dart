@@ -66,6 +66,8 @@ class Body extends StatelessWidget {
           ),
           buildExercises(element['elements'], chain),
           toggleCardSelection,
+          selectedCardsID,
+          isCardSelected,
         ));
 
         List<int> nextChain = [key + 1];

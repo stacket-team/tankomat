@@ -199,7 +199,7 @@ class _AddTrainingState extends State<AddTrainingView> {
     return chains;
   }
 
-  Function toggleCardSelection(List<int> cardID) => () {
+  Function toggleCardSelection(List<int> cardID) => (bool _) {
         List<List<int>> _selectedCards = selectedCards;
         Iterable<String> mappedCards =
             _selectedCards.map((chain) => chain.join(','));
