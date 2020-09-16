@@ -117,8 +117,6 @@ class _AddTrainingState extends State<AddTrainingView> {
   }
 
   Function onCardMoved(List<int> to) => () async {
-        // TODO Fix the out of range error
-        // TODO Unable to move card if the card is first (in all or in group)
         List newElements = elements;
         List removedElements = [];
         selectedCards.sort((a, b) => b.join(',').compareTo(a.join(',')));
@@ -142,6 +140,15 @@ class _AddTrainingState extends State<AddTrainingView> {
             });
           }
           removedElements.add(parent.removeAt(chain.last));
+        }
+
+        // fix the insert chain
+        for (List<int> chain in selectedCards) {
+          for (MapEntry<int, int> entry in chain.asMap().entries) {
+            if (to.length > entry.key && entry.value < to[entry.key]) {
+              to[entry.key] -= 1;
+            }
+          }
         }
 
         // insert new group
